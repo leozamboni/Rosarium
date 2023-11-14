@@ -11,39 +11,56 @@
       header {
         position: absolute;
         width: 100vw;
-        height: 10vh;
+        height: 25vh;
       }
-      header div {
-        margin-left: auto;
-        margin-right: auto;
-        width: 15%;
+      header .topbar {
+        float: left;
+        width: 85%;
         height: 100%;
       }
-      header div .title {
-        margin: 0px;
+      header .topbar #title {
+        margin-top: 0px;
+
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
         text-align: center;
+        left: 0;
+        right: 0;
         font-size: 26pt;
         color: white;
         text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.528);
       }
-      footer {
-        width: 100vw;
-        height: 10vh;
-        position: absolute;
-        bottom: 0;
-      }
-      footer div {
-        text-align: center;
-        margin-left: auto;
-        margin-right: auto;
+      header .leftbar {
+        float: left;
         width: 15%;
         height: 100%;
 
-        background: rgba(255, 255, 255, 0.69);
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 0px 0px 0px 10px;
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(7.6px);
-        -webkit-backdrop-filter: blur(7.6px);
+        backdrop-filter: blur(7.1px);
+        -webkit-backdrop-filter: blur(7.1px);
+
+        text-align: center;
       }
+      footer {
+        position: absolute;
+        bottom: 0;
+        color: white;
+        width: 100vw;
+        box-shadow: 1px -191px 50px -121px rgba(0, 0, 0, 0.713) inset;
+      }
+      footer div {
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+      }
+      footer div #orandi {
+        font-size: 18pt;
+      }
+
       .label {
         color: white;
         opacity: 0;
@@ -61,14 +78,21 @@
   </head>
   <body>
     <header>
-      <div>
-        <p class="title">Rosarium</p>
+      <div class="topbar">
+        <p id="title">Rosarium</p>
+      </div>
+      <div class="leftbar">
+        <!-- <button>Start</button> -->
       </div>
     </header>
     <script type="module" src="/main.js"></script>
     <footer>
       <div>
-        <button>start</button>
+        <p id="orandi">
+          Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et
+          benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora
+          pro nobis peccatoribus, nunc, et in hora mortis nostræ. Amen.
+        </p>
       </div>
     </footer>
   </body>

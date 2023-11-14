@@ -246,7 +246,19 @@ function getLabel(i) {
       return "Ave Maria";
   }
 }
+function getOrandi(i) {
+  switch (i) {
+    case 0:
+      return "Credo in Deum Patrem omnipotentem, Creatorem cæli et terræ. Et in Iesum Christum, Filium eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus, descendit ad inferos, tertia die resurrexit a mortuis, ascendit ad cælos, sedet ad dexteram Dei Patris omnipotentis, inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam æternam. Amen.";
+    case 5:
+    case 1:
+      return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
+    default:
+      return "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostræ. Amen.";
+  }
+}
 
+const orandi = document.getElementById('orandi')
 rosarium.three.labelRenderer.domElement.addEventListener(
   "click",
   (event) => {
@@ -268,10 +280,12 @@ rosarium.three.labelRenderer.domElement.addEventListener(
       if (object.name.includes("node")) {
         object.material.color.set(0x0000ff);
 
-        const i = object.name.split("_")[1];
+        const i = Number(object.name.split("_")[1]);
+        orandi.innerText = getOrandi(i)
+
         const cubeDiv = document.createElement("div");
         cubeDiv.className = "label";
-        cubeDiv.textContent = getLabel(Number(i));
+        cubeDiv.textContent = getLabel(i);
 
         const cubeLabel = new CSS2DObject(cubeDiv);
 
