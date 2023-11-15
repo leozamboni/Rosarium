@@ -8,56 +8,40 @@
         margin: 0;
         padding: 0;
       }
-      header {
+
+      .topbar {
         position: absolute;
         width: 100vw;
-        height: 25vh;
+        background-color: white;
+        height: 50px;
+        text-align: center;
       }
-      header .topbar {
-        float: left;
-        width: 85%;
-        height: 100%;
-      }
-      header .topbar #title {
-        margin-top: 0px;
 
+      .leftbar {
+        z-index: 2;
         position: absolute;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-        left: 0;
         right: 0;
-        font-size: 26pt;
-        color: white;
-        text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.528);
+        height: 100vh;
+        background-color: beige;
+        width: 10vw;
       }
-      header .leftbar {
-        float: left;
-        width: 15%;
-        height: 100%;
 
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 0px 0px 0px 10px;
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(7.1px);
-        -webkit-backdrop-filter: blur(7.1px);
-
-        text-align: center;
-      }
-      footer {
+      .bottom {
         position: absolute;
         bottom: 0;
         color: white;
-        width: 100vw;
         box-shadow: 1px -191px 50px -121px rgba(0, 0, 0, 0.713) inset;
+        width: 100vw;
       }
-      footer div {
+
+      .bottom div {
         width: 80%;
         margin-left: auto;
         margin-right: auto;
         text-align: center;
       }
-      footer div #orandi {
+
+      .bottom div #orandi {
         font-size: 18pt;
       }
 
@@ -77,22 +61,17 @@
     </style>
   </head>
   <body>
-    <header>
-      <div class="topbar">
-        <p id="title">Rosarium</p>
-      </div>
-      <div class="leftbar">
-        <!-- <button>Start</button> -->
-      </div>
-    </header>
-    <script type="module" src="/main.js"></script>
-    <footer>
+    <div class="topbar">
+      <p>Rosarium</p>
+    </div>
+    <div class="leftbar">
+      <label for="">Font size</label>
+      <input type="number" name="" id="">
+    </div>
+    <script id="threejs" type="module" src="/main.js"></script>
+    <footer class="bottom">
       <div>
-        <p id="orandi">
-          Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et
-          benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora
-          pro nobis peccatoribus, nunc, et in hora mortis nostræ. Amen.
-        </p>
+        <p id="orandi"></p>
       </div>
     </footer>
   </body>
