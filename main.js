@@ -6,6 +6,18 @@ import {
   CSS2DRenderer,
 } from "three/addons/renderers/CSS2DRenderer.js";
 
+THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
+  document.body.insertAdjacentHTML(
+    "beforebegin",
+    '<p id="loading-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Loading...<p>'
+  );
+};
+
+THREE.DefaultLoadingManager.onLoad = function () {
+  const e = document.getElementById("loading-text");
+  e.parentNode.removeChild(e);
+};
+
 class Three {
   scene;
   camera;
@@ -258,7 +270,7 @@ function getOrandi(i) {
   }
 }
 
-const orandi = document.getElementById('orandi')
+const orandi = document.getElementById("orandi");
 rosarium.three.labelRenderer.domElement.addEventListener(
   "click",
   (event) => {
@@ -281,7 +293,7 @@ rosarium.three.labelRenderer.domElement.addEventListener(
         object.material.color.set(0x0000ff);
 
         const i = Number(object.name.split("_")[1]);
-        orandi.innerText = getOrandi(i)
+        orandi.innerText = getOrandi(i);
 
         const cubeDiv = document.createElement("div");
         cubeDiv.className = "label";
@@ -301,3 +313,19 @@ rosarium.three.labelRenderer.domElement.addEventListener(
   },
   false
 );
+
+const leftbar = document.getElementById("leftbar");
+let config_clicked = false;
+document.getElementById("config").addEventListener("click", () => {
+  if (config_clicked) {
+    leftbar.style.display = "none";
+  } else {
+    leftbar.style.display = "initial";
+  }
+  config_clicked = !config_clicked;
+});
+
+document.getElementById("cancel").addEventListener("click", () => {
+  leftbar.style.display = "none";
+  config_clicked = false
+});
