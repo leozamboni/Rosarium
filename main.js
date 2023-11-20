@@ -258,7 +258,7 @@ function getLabel(i) {
       return "Ave Maria";
   }
 }
-function getOrandi(i) {
+function getPray(i) {
   switch (i) {
     case 0:
       return "Credo in Deum Patrem omnipotentem, Creatorem cæli et terræ. Et in Iesum Christum, Filium eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus, descendit ad inferos, tertia die resurrexit a mortuis, ascendit ad cælos, sedet ad dexteram Dei Patris omnipotentis, inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam æternam. Amen.";
@@ -293,7 +293,7 @@ rosarium.three.labelRenderer.domElement.addEventListener(
         object.material.color.set(0x0000ff);
 
         const i = Number(object.name.split("_")[1]);
-        orandi.innerText = getOrandi(i);
+        orandi.innerText = getPray(i);
 
         const cubeDiv = document.createElement("div");
         cubeDiv.className = "label";
