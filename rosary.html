@@ -24,7 +24,7 @@
         position: absolute;
         right: 0;
         height: 100vh;
-        width: 15vw;
+        width: 350px;
 
         background: #ffffff;
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -69,8 +69,8 @@
         cursor: pointer;
       }
 
-            /* The switch - the box around the slider */
-            .switch {
+      /* The switch - the box around the slider */
+      .switch {
         position: relative;
         display: inline-block;
         width: 55px;
@@ -185,7 +185,7 @@
 
         <div
           class="pr-2 scrollbar-w-0.5 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300 overflow-y-scroll"
-          style="height: calc(100vh - 400px)"
+          style="height: calc(100vh - 425px)"
         >
           <div class="pb-10 mt-3 border-b border-gray-900/10">
             <h2 class="text-base font-semibold leading-7 text-black">
@@ -193,133 +193,103 @@
             </h2>
             <p class="text-sm leading-6 text-gray-600">
               Place: St Peter's Church,
-              <a href="" class="text-blue">change</a>.
+              <a href="/" class="text-blue">change</a>.
             </p>
             <p class="text-sm leading-6 text-gray-600">
-              Rosary: Wood default, <a href="" class="text-blue">change</a>.
+              Rosary: Wood default, <a href="/" class="text-blue">change</a>.
             </p>
 
-            <label
-              for="last-name"
-              class="block text-sm font-medium leading-6 text-black"
+            <label class="block text-sm font-medium leading-6 text-black"
               >Period</label
             >
             <select
-              name="ffontsize"
-              id="ffontsize"
+              id="period"
+              name="period"
               class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:max-w-xs sm:text-sm sm:leading-6"
             >
-              <option value="">Day</option>
-              <option value="">Night</option>
+              <option value="day">Day</option>
+              <option value="night">Night</option>
             </select>
           </div>
 
           <div class="pb-10 mt-3 border-b border-gray-900/10">
-            <h2 class="text-base font-semibold leading-7 text-black">
-              Ambience
-            </h2>
+            <h2 class="text-base font-semibold leading-7 text-black">Rosary</h2>
 
-            <label
-              for="last-name"
-              class="block text-sm font-medium leading-6 text-black"
-              >Playlist</label
-            >
-            <select
-              name="ffontsize"
-              id="ffontsize"
-              class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:max-w-xs sm:text-sm sm:leading-6"
-            >
-              <option value="">Day</option>
-              <option value="">Night</option>
-            </select>
-          </div>
-
-          <div class="pb-10 mt-3 border-b border-gray-900/10">
-            <h2 class="text-base font-semibold leading-7 text-black">
-              Rosary
-            </h2>
-
-            <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <div class="sm:col-span-2">
-                <label
-                  for="first-name"
-                  class="block text-sm font-medium leading-6 text-black"
+            <div class="mt-2 flex">
+              <div class="inline w-2/4">
+                <label class="block text-sm font-medium leading-6 text-black"
                   >Auto bead</label
                 >
                 <label class="switch">
-                  <input type="checkbox" />
+                  <input id="auto-bead" name="auto-bead" type="checkbox" />
                   <span class="slider round"></span>
                 </label>
               </div>
 
-              <div class="sm:col-span-4">
-                <label
-                  for="last-name"
-                  class="block text-sm font-medium leading-6 text-black"
+              <div class="inline w-2/4">
+                <label class="block text-sm font-medium leading-6 text-black"
                   >Bead time</label
                 >
                 <select
-                  name="ffontsize"
-                  id="ffontsize"
+                  id="bead-time"
+                  name="bead-time"
                   class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
-                  <option value="">40s.</option>
-                  <option value="">50s.</option>
-                  <option value="">1min.</option>
-                  <option value="">2min.</option>
-                  <option value="">3min.</option>
+                  <option value="40s">40s.</option>
+                  <option value="50s">50s.</option>
+                  <option value="1min">1min.</option>
+                  <option value="2min">2min.</option>
+                  <option value="3min">3min.</option>
                 </select>
               </div>
             </div>
+
+            <div class="mt-2">
+              <label class="block text-sm font-medium leading-6 text-black"
+                >Ora pro nobis</label
+              >
+              <textarea
+                name="ora-pro-nobis"
+                id="ora-pro-nobis"
+                class="block rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 w-full sm:text-sm sm:leading-6"
+                placeholder="Ex: St Catherine of Siena, St Thomas Aquinas, ..."
+              ></textarea>
+            </div>
           </div>
 
-          <h2 class="text-base font-semibold leading-7 text-black">
-            General
-          </h2>
+          <h2 class="text-base font-semibold leading-7 text-black">General</h2>
 
           <div class="mt-2">
-            <label
-              for="country"
-              class="block text-sm font-medium leading-6 text-black"
+            <label class="block text-sm font-medium leading-6 text-black"
               >UI Language</label
             >
             <select
-              name="ffontsize"
-              id="ffontsize"
+              id="ui-language"
+              name="ui-language"
               class="focus:ring-green-600 block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset sm:max-w-xs sm:text-sm sm:leading-6"
             >
-              <option value="">English</option>
-              <option value="">Portuguese</option>
+              <option value="english">English</option>
+              <option value="portuguese">Portuguese</option>
             </select>
           </div>
 
           <div class="mt-2">
-            <label
-              for="country"
-              class="block text-sm font-medium leading-6 text-black"
+            <label class="block text-sm font-medium leading-6 text-black"
               >Font size</label
             >
             <select
-              name="ffontsize"
-              id="ffontsize"
+              id="font-size"
+              name="font-size"
               class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:max-w-xs sm:text-sm sm:leading-6"
             >
-              <option value="">10pt</option>
-              <option value="">12pt</option>
-              <option value="">14pt</option>
-              <option value="">16pt</option>
-              <option value="">18pt</option>
-              <option value="">24pt</option>
-              <option value="">30pt</option>
-              <option value="">36pt</option>
-              <option value="">48pt</option>
-              <option value="">60pt</option>
-              <option value="">72pt</option>
-              <option value="">84pt</option>
+              <option value="10pt">10pt</option>
+              <option value="12pt">12pt</option>
+              <option value="14pt">14pt</option>
+              <option value="16pt">16pt</option>
+              <option value="18pt">18pt</option>
+              <option value="24pt">24pt</option>
             </select>
           </div>
-
-     
         </div>
 
         <div class="mt-6 flex items-center justify-end gap-x-6">
@@ -338,23 +308,22 @@
           </button>
         </div>
 
-
         <div class="mr-5 mb-12 pt-5 absolute bottom-0 rounded-md">
-          <h2 class="text-base font-semibold leading-7 text-black">
+          <h2 class="text-base font-semibold leading-5 text-black">
             Explore St Peter's Church, Stourton.
           </h2>
 
           <div class="card mt-2">
             <img
               class="rounded hover:grayscale border border-yellow"
-              src="st-peters-church-stourton.jpg"
+              src="assets/places/st-peters-church-stourton.jpg"
               alt=""
             />
           </div>
         </div>
       </form>
     </div>
-    <script id="threejs" type="module" src="/main.js"></script>
+    <script id="threejs" type="module" src="/rosary.js"></script>
     <footer class="bottom">
       <div>
         <p id="orandi"></p>

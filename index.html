@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script defer type="module" src="main.js"></script>
     <link href="/dist/output.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -122,158 +123,158 @@
       <p class="text-sm leading-6 text-center text-yellow">Deus caritas est</p>
 
       <div class="px-40">
-        <div
-          class="pr-4 scrollbar-w-0.5 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300 overflow-y-scroll"
-          style="height: calc(100vh - 200px)"
-        >
-          <div class="pb-10 mt-3 border-b border-gray-900/10">
-            <h2 class="text-base font-semibold leading-7 text-black">
-              Environment
-            </h2>
+        <form action="/rosary.html">
+          <div
+            class="pr-4 scrollbar-w-0.5 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300 overflow-y-scroll"
+            style="height: calc(100vh - 200px)"
+          >
+            <div class="pb-10 mt-3 border-b border-gray-900/10">
+              <h2 class="text-base font-semibold leading-7 text-black">
+                Environment
+              </h2>
 
-            <label class="block text-sm font-medium leading-6 text-black"
-              >Place</label
-            >
+              <select name="place" id="place-hidden-select" class="hidden">
+              </select>
 
-            <div
-              style="background-color: #d8d8d8"
-              class="py-2 rounded-md whitespace-nowrap overflow-x-scroll scrollbar-h-2 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300"
-            >
-              <div
-                class="cursor-pointer inline-block mx-2 bg-white w-1/3 h-full rounded shadow px-2 py-2"
+              <label class="block text-sm font-medium leading-6 text-black"
+                >Place</label
               >
-                <img
-                  class="rounded"
-                  src="st-peters-church-stourton.jpg"
-                  alt=""
-                />
-                <span class="text-sm">St Peter's Church, Stourton.</span>
+
+              <div
+                id="place-list"
+                style="background-color: #d8d8d8"
+                class="py-2 rounded-md whitespace-nowrap overflow-x-scroll scrollbar-h-2 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300"
+              ></div>
+
+              <label class="block text-sm font-medium leading-6 text-black"
+                >Rosary</label
+              >
+              <select
+                name="rosary"
+                id="rosary"
+                disabled
+                class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+              >
+                <option value="wood_default">Wood default</option>
+              </select>
+
+              <label class="block text-sm font-medium leading-6 text-black"
+                >Period</label
+              >
+              <select
+                name="period"
+                id="period"
+                class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600"
+              >
+                <option value="day">Day</option>
+                <option value="night">Night</option>
+              </select>
+
+              <br />
+              <p class="text-sm leading-6 text-gray-600">
+                <a
+                  target="_blank"
+                  href="https://freesound.org/browse/tags/?advanced=&g=1&only_p=&q=&f=tag%3A%22nature%22+tag%3A%22ambience%22%20tag:%22field-recording%22&s=Date%20added%20(newest%20first)&w="
+                  class="text-blue"
+                  >Ambient sounds</a
+                >
+              </p>
+            </div>
+
+            <div class="pb-10 mt-3 border-b border-gray-900/10">
+              <h2 class="text-base font-semibold leading-7 text-black">
+                Rosary
+              </h2>
+
+              <div class="mt-2 flex">
+                <div class="inline w-1/4">
+                  <label class="block text-sm font-medium leading-6 text-black"
+                    >Auto bead</label
+                  >
+                  <label class="switch">
+                    <input id="auto-bead" name="auto-bead" type="checkbox" />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+  
+                <div class="inline w-2/4">
+                  <label class="block text-sm font-medium leading-6 text-black"
+                    >Bead time</label
+                  >
+                  <select
+                    id="bead-time"
+                    name="bead-time"
+                    class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  >
+                    <option value="40s">40s.</option>
+                    <option value="50s">50s.</option>
+                    <option value="1min">1min.</option>
+                    <option value="2min">2min.</option>
+                    <option value="3min">3min.</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="mt-2">
+                <label class="block text-sm font-medium leading-6 text-black"
+                  >Ora pro nobis</label
+                >
+                <textarea
+                  name="ora-pro-nobis"
+                  id="ora-pro-nobis"
+                  class="block rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 w-full sm:text-sm sm:leading-6"
+                  placeholder="Ex: St Catherine of Siena, St Thomas Aquinas, ..."
+                ></textarea>
               </div>
             </div>
 
-            <label class="block text-sm font-medium leading-6 text-black"
-              >Rosary</label
-            >
-            <select
-              disabled
-              class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
-            >
-              <option value="">Wood default</option>
-            </select>
-
-            <label class="block text-sm font-medium leading-6 text-black"
-              >Period</label
-            >
-            <select
-              class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600"
-            >
-              <option value="">Day</option>
-              <option value="">Night</option>
-            </select>
-          </div>
-
-          <div class="pb-10 mt-3 border-b border-gray-900/10">
             <h2 class="text-base font-semibold leading-7 text-black">
-              Ambience
+              General
             </h2>
 
-            <label class="block text-sm font-medium leading-6 text-black"
-              >Playlist</label
-            >
-            <select
-              class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600"
-            >
-              <option value="">Day</option>
-              <option value="">Night</option>
-            </select>
-          </div>
-
-          <div class="pb-10 mt-3 border-b border-gray-900/10">
-            <h2 class="text-base font-semibold leading-7 text-black">Rosary</h2>
-
-            <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <div class="sm:col-span-2 w-2/4">
-                <label class="block text-sm font-medium leading-6 text-black"
-                  >Auto bead</label
-                >
-                <label class="switch">
-                  <input type="checkbox" />
-                  <span class="slider round"></span>
-                </label>
-              </div>
-
-              <div class="sm:col-span-4 w-2/4 ">
-                <label class="block text-sm font-medium leading-6 text-black"
-                  >Bead time</label
-                >
-                <select
-                  class="block rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600"
-                >
-                  <option value="">40s.</option>
-                  <option value="">50s.</option>
-                  <option value="">1min.</option>
-                  <option value="">2min.</option>
-                  <option value="">3min.</option>
-                </select>
-              </div>
+            <div class="mt-2">
+              <label class="block text-sm font-medium leading-6 text-black"
+                >UI Language</label
+              >
+              <select
+                name="ui-language"
+                id="ui-language"
+                class="focus:ring-green-600 block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset"
+              >
+                <option value="english">English</option>
+                <option value="portuguese">Portuguese</option>
+              </select>
             </div>
 
             <div class="mt-2">
               <label class="block text-sm font-medium leading-6 text-black"
-                >Ora pro nobis</label
+                >Font size</label
               >
-              <textarea
-                class="block rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 w-full sm:text-sm sm:leading-6"
-                placeholder="Ex: St Catherine of Siena, St Thomas Aquinas, ..."
-              ></textarea>
+              <select
+                name="font-size"
+                id="font-size"
+                class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600"
+              >
+                <option value="10pt">10pt</option>
+                <option value="12pt">12pt</option>
+                <option value="14pt">14pt</option>
+                <option value="16pt">16pt</option>
+                <option value="18pt">18pt</option>
+                <option value="24pt">24pt</option>
+              </select>
             </div>
           </div>
 
-          <h2 class="text-base font-semibold leading-7 text-black">General</h2>
-
-          <div class="mt-2">
-            <label class="block text-sm font-medium leading-6 text-black"
-              >UI Language</label
+          <div class="text-center mt-10">
+            <button
+              id="start-btn"
+              type="submit"
+              class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
             >
-            <select
-              class="focus:ring-green-600 block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset"
-            >
-              <option value="">English</option>
-              <option value="">Portuguese</option>
-            </select>
+              Start
+            </button>
           </div>
-
-          <div class="mt-2">
-            <label class="block text-sm font-medium leading-6 text-black"
-              >Font size</label
-            >
-            <select
-              class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600"
-            >
-              <option value="">10pt</option>
-              <option value="">12pt</option>
-              <option value="">14pt</option>
-              <option value="">16pt</option>
-              <option value="">18pt</option>
-              <option value="">24pt</option>
-              <option value="">30pt</option>
-              <option value="">36pt</option>
-              <option value="">48pt</option>
-              <option value="">60pt</option>
-              <option value="">72pt</option>
-              <option value="">84pt</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="text-center mt-10">
-          <button
-            type="submit"
-            class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-          >
-            Start
-          </button>
-        </div>
+        </form>
       </div>
     </div>
   </body>
