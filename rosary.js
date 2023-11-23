@@ -185,7 +185,7 @@ const nodesPos = [
   { size: 0.033, x: 0.1, y: -0.07, z: 0.04 },
   { size: 0.033, x: 0.16, y: -0.09, z: 0.04 },
   { size: 0.033, x: 0.21, y: -0.12, z: 0.04 },
-  { size: 0.033, x: 0.33, y: -0.09, z: 0.04 },
+  { size: 0.033, x: 0.33, y: -0.09, z: 0.04 }, // pai nosso, salve rainha
   { size: 0.033, x: 0.33, y: 0.02, z: 0.04 },
   { size: 0.033, x: 0.31, y: 0.08, z: 0.04 },
   { size: 0.033, x: 0.27, y: 0.12, z: 0.04 },
@@ -196,6 +196,7 @@ const nodesPos = [
   { size: 0.033, x: 0.01, y: 0.07, z: 0.04 },
   { size: 0.033, x: -0.04, y: 0.05, z: 0.04 },
   { size: 0.033, x: -0.095, y: 0.03, z: 0.04 },
+  { size: 0.033, x: -0.14, y: 0.009, z: 0.04 }, // pai nosso
   { size: 0.033, x: -0.192, y: 0.009, z: 0.04 },
   { size: 0.033, x: -0.25, y: 0.009, z: 0.04 },
   { size: 0.033, x: -0.305, y: 0.015, z: 0.04 },
@@ -206,8 +207,8 @@ const nodesPos = [
   { size: 0.033, x: -0.445, y: 0.225, z: 0.04 },
   { size: 0.033, x: -0.43, y: 0.28, z: 0.04 },
   { size: 0.033, x: -0.4, y: 0.33, z: 0.04 },
-  { size: 0.033, x: -0.35, y: 0.395, z: 0.04 },
-  { size: 0.033, x: -0.305, y: 0.42, z: 0.04 },
+  { size: 0.033, x: -0.36, y: 0.38, z: 0.04 }, // pai nosso
+  { size: 0.033, x: -0.311, y: 0.42, z: 0.04 },
   { size: 0.033, x: -0.255, y: 0.44, z: 0.04 },
   { size: 0.033, x: -0.202, y: 0.45, z: 0.04 },
   { size: 0.033, x: -0.145, y: 0.465, z: 0.04 },
@@ -217,6 +218,7 @@ const nodesPos = [
   { size: 0.033, x: 0.085, y: 0.46, z: 0.04 },
   { size: 0.033, x: 0.145, y: 0.45, z: 0.04 },
   { size: 0.033, x: 0.2, y: 0.44, z: 0.04 },
+  { size: 0.033, x: 0.265, y: 0.44, z: 0.04 }, // pai nosso
   { size: 0.033, x: 0.325, y: 0.4395, z: 0.04 },
   { size: 0.033, x: 0.37, y: 0.41, z: 0.04 },
   { size: 0.033, x: 0.33, y: 0.365, z: 0.04 },
@@ -227,6 +229,7 @@ const nodesPos = [
   { size: 0.033, x: 0.05, y: 0.293, z: 0.04 },
   { size: 0.033, x: 0.01, y: 0.25, z: 0.04 },
   { size: 0.033, x: 0.01, y: 0.2, z: 0.04 },
+  { size: 0.033, x: 0.065, y: 0.2, z: 0.04 }, // pai nosso
   { size: 0.033, x: 0.115, y: 0.215, z: 0.04 },
   { size: 0.033, x: 0.17, y: 0.24, z: 0.04 },
   { size: 0.033, x: 0.225, y: 0.26, z: 0.04 },
@@ -238,6 +241,7 @@ const nodesPos = [
   { size: 0.033, x: 0.445, y: 0.105, z: 0.04 },
   { size: 0.033, x: 0.445, y: 0.05, z: 0.04 },
   { size: 0.033, x: 0.42, y: 0, z: 0.04 },
+  // { size: 0.033, x: 0.37, y: -0.03, z: 0.04 }, // salve rainha
 ];
 
 nodesPos.map(({ size, x, y, z }, i) =>
@@ -270,7 +274,12 @@ function getLabel(i) {
   switch (i) {
     case 0:
       return "Credo";
+    case 49:
+    case 38:
+    case 27:
+    case 16:
     case 5:
+      return "Doxologia Minor\nOratio Fatima\nPater Noster";
     case 1:
       return "Pater Noster";
     default:
@@ -314,7 +323,7 @@ rosarium.three.labelRenderer.domElement.addEventListener(
         const i = Number(object.name.split("_")[1]);
         orandi.innerText = getPray(i);
 
-        const cubeDiv = document.createElement("div");
+        const cubeDiv = document.createElement("pre");
         cubeDiv.className = "label";
         cubeDiv.textContent = getLabel(i);
 
