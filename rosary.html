@@ -49,6 +49,13 @@
         font-size: 18pt;
       }
 
+      .bottom #progress-bar {
+        height: 2px;
+        width: 100vw;
+        background-color: #3b8043;
+        display: none;
+      }
+
       .label {
         text-align: center;
         color: white;
@@ -139,10 +146,11 @@
     <div
       style="
         position: absolute;
-        top: 30px;
+        top: 80px;
         right: 0;
         transform: translate(-50%, -50%);
         z-index: 2;
+        right: 15px;
       "
     >
       <button id="config">
@@ -172,6 +180,64 @@
               </g>
             </g>
           </g>
+        </svg>
+      </button>
+      <span style="margin-top: 10px; display: block"></span>
+      <button id="right-btn">
+        <svg
+          width="20"
+          height="20"
+          style="color: white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 6 10"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m1 9 4-4-4-4"
+          />
+        </svg>
+      </button>
+      <span style="margin-top: 10px; display: block"></span>
+      <button id="left-btn">
+        <svg
+          width="20"
+          height="20"
+          style="color: white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 6 10"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 1 1 5l4 4"
+          />
+        </svg>
+      </button>
+      <span style="margin-top: 10px; display: block"></span>
+      <button id="pause-btn">
+        <svg
+          width="20"
+          height="20"
+          style="color: white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 10 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M0 .8C0 .358.32 0 .714 0h1.429c.394 0 .714.358.714.8v14.4c0 .442-.32.8-.714.8H.714a.678.678 0 0 1-.505-.234A.851.851 0 0 1 0 15.2V.8Zm7.143 0c0-.442.32-.8.714-.8h1.429c.19 0 .37.084.505.234.134.15.209.354.209.566v14.4c0 .442-.32.8-.714.8H7.857c-.394 0-.714-.358-.714-.8V.8Z"
+            clip-rule="evenodd"
+          />
         </svg>
       </button>
     </div>
@@ -238,9 +304,9 @@
                 >
                   <option value="40s">40s.</option>
                   <option value="50s">50s.</option>
-                  <option value="1min">1min.</option>
-                  <option value="2min">2min.</option>
-                  <option value="3min">3min.</option>
+                  <option value="60s">1min.</option>
+                  <option value="120s">2min.</option>
+                  <option value="180s">3min.</option>
                 </select>
               </div>
             </div>
@@ -329,6 +395,7 @@
       <div>
         <p id="orandi"></p>
       </div>
+      <div id="progress-bar"></div>
     </footer>
   </body>
 </html>

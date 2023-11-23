@@ -122,7 +122,7 @@
       </h1>
       <p class="text-sm leading-6 text-center text-yellow">Deus caritas est</p>
 
-      <div class="px-40">
+      <div style="margin: 0px 100px 0 100px">
         <form action="/rosary.html">
           <div
             class="pr-4 scrollbar-w-0.5 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300 overflow-y-scroll"
@@ -133,8 +133,11 @@
                 Environment
               </h2>
 
-              <select name="place" id="place-hidden-select" class="hidden">
-              </select>
+              <select
+                name="place"
+                id="place-hidden-select"
+                class="hidden"
+              ></select>
 
               <label class="block text-sm font-medium leading-6 text-black"
                 >Place</label
@@ -196,7 +199,7 @@
                     <span class="slider round"></span>
                   </label>
                 </div>
-  
+
                 <div class="inline w-2/4">
                   <label class="block text-sm font-medium leading-6 text-black"
                     >Bead time</label
@@ -208,9 +211,9 @@
                   >
                     <option value="40s">40s.</option>
                     <option value="50s">50s.</option>
-                    <option value="1min">1min.</option>
-                    <option value="2min">2min.</option>
-                    <option value="3min">3min.</option>
+                    <option value="60s">1min.</option>
+                    <option value="120s">2min.</option>
+                    <option value="180s">3min.</option>
                   </select>
                 </div>
               </div>
@@ -258,7 +261,7 @@
                 <option value="10pt">10pt</option>
                 <option value="12pt">12pt</option>
                 <option value="14pt">14pt</option>
-                <option value="16pt">16pt</option>
+                <option value="16pt" selected="selected">16pt</option>
                 <option value="18pt">18pt</option>
                 <option value="24pt">24pt</option>
               </select>

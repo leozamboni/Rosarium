@@ -5,8 +5,20 @@ import {
   CSS2DObject,
   CSS2DRenderer,
 } from "three/addons/renderers/CSS2DRenderer.js";
-
 import { places } from "./places.js";
+
+THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
+  document.body.insertAdjacentHTML(
+    "beforebegin",
+    '<p id="loading-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Loading...<p>'
+  );
+};
+
+THREE.DefaultLoadingManager.onLoad = function () {
+  const e = document.getElementById("loading-text");
+  e.parentNode.removeChild(e);
+  rosarium.start_progress_bar();
+};
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -25,17 +37,22 @@ for (const [label, value] of urlParams) {
   }
 }
 
-THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
-  document.body.insertAdjacentHTML(
-    "beforebegin",
-    '<p id="loading-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Loading...<p>'
-  );
-};
-
-THREE.DefaultLoadingManager.onLoad = function () {
-  const e = document.getElementById("loading-text");
-  e.parentNode.removeChild(e);
-};
+class Config {
+  beadTime;
+  fontSize;
+  oraProNobis;
+  uiLanguage;
+  constructor() {
+    if (urlParams.get("auto-bead")) {
+      this.beadTime = Number(urlParams.get("bead-time").replace(/[^0-9]/g, ""));
+    } else {
+      document.getElementById("pause-btn").style.display = "none";
+    }
+    this.oraProNobis = urlParams.get("ora-pro-nobis");
+    this.uiLanguage = urlParams.get("ui-language");
+    this.fontSize = urlParams.get("font-size");
+  }
+}
 
 class Three {
   scene;
@@ -45,6 +62,7 @@ class Three {
   raycaster;
   mouse;
   labelRenderer;
+  rosaryNodes;
   constructor() {
     this.scene = new THREE.Scene();
     if (Rosarium.isDevMode) {
@@ -83,6 +101,8 @@ class Three {
     this.raycaster = new THREE.Raycaster();
 
     this.mouse = new THREE.Vector2();
+
+    this.rosaryNodes = [];
   }
   createLight(color, intensity, callback) {
     const light = new THREE.DirectionalLight(color, intensity);
@@ -104,6 +124,7 @@ class Three {
     callback && callback(sphere);
     // sphere.name = "hitbox";
     this.scene.add(sphere);
+    this.rosaryNodes.push(sphere);
   }
   loadGLTFModel(model, callback) {
     var self = this;
@@ -146,15 +167,147 @@ class Resources {
 class Rosarium {
   three;
   resources;
+  config;
+  elements;
+
+  skipTo;
+
+  currentNodeIndex = 0;
+
+  paused = false;
+  pausedNode = 0;
+  pausedPercent = 0;
+
+  adGranaMaioraLabel = 0;
+
   static mode = "";
   static isDevMode = this.mode === "dev";
   constructor() {
     this.three = new Three();
     this.resources = new Resources();
+    this.config = new Config();
+    this.elements = {
+      orandi: document.getElementById("orandi"),
+      progressBar: document.getElementById("progress-bar"),
+    };
+  }
+  configure() {
+    this.elements.orandi.style.fontSize = this.config.fontSize;
+    if (this.config.beadTime) {
+      this.elements.progressBar.style.display = "block";
+    }
+  }
+  async start_progress_bar() {
+    this.selectNode(0);
+    if (this.config.beadTime) {
+      const p = await progress_bar_round(0, this.config.beadTime);
+      if (p) {
+        this.pausedNode = 0;
+        return;
+      }
+
+      for (let i = 1; i < nodesPos.length - 1; i++) {
+        this.selectNode(i);
+        const p = await progress_bar_round(0, this.config.beadTime);
+        if (p) {
+          this.pausedNode = i;
+          return;
+        }
+      }
+    }
+  }
+  async continue_progress_bar() {
+    let i = this.pausedNode;
+    if (this.skipTo) {
+      i = this.skipTo;
+      this.skipTo = undefined;
+    }
+    for (; i < nodesPos.length - 1; i++) {
+      this.selectNode(i);
+      let p;
+      if (i === this.pausedNode) {
+        p = await progress_bar_round(
+          0,
+          this.config.beadTime,
+          this.pausedPercent
+        );
+      } else {
+        p = await progress_bar_round(0, this.config.beadTime);
+      }
+
+      if (p) {
+        this.pausedNode = i;
+        return;
+      }
+    }
+  }
+  reset_progress_bar() {
+    this.skipTo = this.currentNodeIndex;
+  }
+  selectNode(i, nodeClick) {
+    if (!nodeClick && !this.adGranaMaioraLabel) {
+      this.currentNodeIndex = i;
+    }
+    let object;
+    if (this.adGranaMaioraLabel) {
+      object = this.three.rosaryNodes[this.currentNodeIndex];
+    } else {
+      object = this.three.rosaryNodes[i];
+    }
+
+    const label = getLabel(i);
+    const cubeDiv = document.createElement("pre");
+    cubeDiv.className = "label";
+    cubeDiv.textContent = label;
+
+    let pray = getPray(label);
+    if (!this.adGranaMaioraLabel && label.includes("Doxologia Minor")) {
+      this.adGranaMaioraLabel = 1;
+      console.log('aqui');
+      pray =
+        "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in sæcula sæculorum. Amen.";
+    }
+    else if (this.adGranaMaioraLabel === 1 && label.includes("Oratio Fatima")) {
+      this.adGranaMaioraLabel = 2;
+      pray =
+        "O mi Iesu, dimitte nobis debita nostra, libera nos ab igne inferni, conduc in cælum omnes animas, præsertim illas quæ maxime indigent misericordia tua.";
+    }
+    else if (this.adGranaMaioraLabel === 2 && label.includes("Pater Noster")) {
+      this.adGranaMaioraLabel = 0;
+      pray =
+        "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
+    }
+    this.elements.orandi.innerText = pray;
+
+    const cubeLabel = new CSS2DObject(cubeDiv);
+
+    object.add(cubeLabel);
+    this.three.labelRenderer.render(this.three.scene, this.three.camera);
   }
 }
 
 const rosarium = new Rosarium();
+rosarium.configure();
+
+async function progress_bar_round(seconds, max, start_from) {
+  let percent;
+  if (start_from) {
+    percent = start_from;
+    seconds = max / (100 / start_from);
+  } else {
+    percent = (100 / max) * seconds;
+  }
+  rosarium.elements.progressBar.style.width = percent + "%";
+  await new Promise((r) => setTimeout(r, 1000));
+  if (percent === 100) {
+    return false;
+  }
+  if (rosarium.paused) {
+    rosarium.pausedPercent = percent;
+    return true;
+  }
+  return await progress_bar_round(++seconds, max);
+}
 
 rosarium.three.loadGLTFModel(
   rosarium.resources.models.church_of_st_peter_stourton,
@@ -286,19 +439,18 @@ function getLabel(i) {
       return "Ave Maria";
   }
 }
-function getPray(i) {
-  switch (i) {
-    case 0:
+function getPray(pray) {
+  switch (pray) {
+    case "Credo":
       return "Credo in Deum Patrem omnipotentem, Creatorem cæli et terræ. Et in Iesum Christum, Filium eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus, descendit ad inferos, tertia die resurrexit a mortuis, ascendit ad cælos, sedet ad dexteram Dei Patris omnipotentis, inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam æternam. Amen.";
-    case 5:
-    case 1:
+    case "Doxologia Minor\nOratio Fatima\nPater Noster":
+    case "Pater Noster":
       return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
     default:
       return "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostræ. Amen.";
   }
 }
 
-const orandi = document.getElementById("orandi");
 rosarium.three.labelRenderer.domElement.addEventListener(
   "click",
   (event) => {
@@ -318,22 +470,7 @@ rosarium.three.labelRenderer.domElement.addEventListener(
     if (intersects.length > 0) {
       const object = intersects[0].object;
       if (object.name.includes("node")) {
-        object.material.color.set(0x0000ff);
-
-        const i = Number(object.name.split("_")[1]);
-        orandi.innerText = getPray(i);
-
-        const cubeDiv = document.createElement("pre");
-        cubeDiv.className = "label";
-        cubeDiv.textContent = getLabel(i);
-
-        const cubeLabel = new CSS2DObject(cubeDiv);
-
-        object.add(cubeLabel);
-        rosarium.three.labelRenderer.render(
-          rosarium.three.scene,
-          rosarium.three.camera
-        );
+        rosarium.selectNode(Number(object.name.split("_")[1]), true);
       }
     }
 
@@ -356,4 +493,28 @@ document.getElementById("config").addEventListener("click", () => {
 document.getElementById("cancel").addEventListener("click", () => {
   leftbar.style.display = "none";
   config_clicked = false;
+});
+
+document.getElementById("pause-btn").addEventListener("click", () => {
+  const val = !rosarium.paused;
+  rosarium.paused = val;
+  if (!val) {
+    rosarium.continue_progress_bar();
+  }
+});
+
+document.getElementById("left-btn").addEventListener("click", () => {
+  let i = rosarium.currentNodeIndex - 1;
+  if (i < 0) i = nodesPos.length - 1;
+  rosarium.paused = true;
+  rosarium.selectNode(i);
+  rosarium.reset_progress_bar();
+});
+
+document.getElementById("right-btn").addEventListener("click", () => {
+  let i = rosarium.currentNodeIndex + 1;
+  if (i > nodesPos.length - 1) i = 0;
+  rosarium.paused = true;
+  rosarium.selectNode(i);
+  rosarium.reset_progress_bar();
 });
