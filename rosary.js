@@ -40,7 +40,7 @@ for (const [label, value] of urlParams) {
 class Config {
   beadTime;
   fontSize;
-  oraProNobis;
+  jaculatorium;
   uiLanguage;
   constructor() {
     if (urlParams.get("auto-bead")) {
@@ -48,7 +48,11 @@ class Config {
     } else {
       document.getElementById("pause-btn").style.display = "none";
     }
-    this.oraProNobis = urlParams.get("ora-pro-nobis");
+    const jaculatorium = urlParams.get("jaculatorium");
+    if (jaculatorium?.length) {
+      this.jaculatorium =
+        jaculatorium.split(",").join(" ora pro nobis, ") + " ora pro nobis.";
+    }
     this.uiLanguage = urlParams.get("ui-language");
     this.fontSize = urlParams.get("font-size");
   }
@@ -275,7 +279,16 @@ class Rosarium {
       case 27:
       case 16:
       case 5:
-        return "Doxologia Minor\nOratio Fatima\nPater Noster";
+        if (this.adGranaMaioraLabel === 1) {
+          return "Oratio Fatima";
+        }
+        if (this.adGranaMaioraLabel === 2) {
+          return "Pater Noster";
+        }
+        if (this.adGranaMaioraLabel === 3 && this.config.jaculatorium?.length) {
+          return "Jaculatorium";
+        }
+        return "Doxologia Minor";
       case 1:
         return "Pater Noster";
       default:
@@ -297,9 +310,21 @@ class Rosarium {
       this.adGranaMaioraLabel === 2 &&
       label.includes("Pater Noster")
     ) {
+      if (this.config.jaculatorium?.length) {
+        this.adGranaMaioraLabel = 3;
+      } else {
+        this.adGranaMaioraLabel = 0;
+        this.adGranaMaioraIndex = 0;
+      }
+
+      return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
+    } else if (
+      this.adGranaMaioraLabel === 3 &&
+      this.config.jaculatorium?.length
+    ) {
       this.adGranaMaioraLabel = 0;
       this.adGranaMaioraIndex = 0;
-      return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
+      return this.config.jaculatorium;
     }
 
     switch (label) {
