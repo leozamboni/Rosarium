@@ -179,6 +179,7 @@ class Rosarium {
   pausedPercent = 0;
 
   adGranaMaioraLabel = 0;
+  adGranaMaioraIndex = 0;
 
   static mode = "";
   static isDevMode = this.mode === "dev";
@@ -244,45 +245,72 @@ class Rosarium {
   reset_progress_bar() {
     this.skipTo = this.currentNodeIndex;
   }
-  selectNode(i, nodeClick) {
-    if (!nodeClick && !this.adGranaMaioraLabel) {
-      this.currentNodeIndex = i;
-    }
-    let object;
+  selectNode(i) {
     if (this.adGranaMaioraLabel) {
-      object = this.three.rosaryNodes[this.currentNodeIndex];
-    } else {
-      object = this.three.rosaryNodes[i];
+      i = this.adGranaMaioraIndex;
     }
 
-    const label = getLabel(i);
+    this.currentNodeIndex = i;
+
+    const object = this.three.rosaryNodes[i];
+
+    const label = this.getLabel(i);
     const cubeDiv = document.createElement("pre");
     cubeDiv.className = "label";
     cubeDiv.textContent = label;
 
-    let pray = getPray(label);
-    if (!this.adGranaMaioraLabel && label.includes("Doxologia Minor")) {
-      this.adGranaMaioraLabel = 1;
-      console.log('aqui');
-      pray =
-        "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in sæcula sæculorum. Amen.";
-    }
-    else if (this.adGranaMaioraLabel === 1 && label.includes("Oratio Fatima")) {
-      this.adGranaMaioraLabel = 2;
-      pray =
-        "O mi Iesu, dimitte nobis debita nostra, libera nos ab igne inferni, conduc in cælum omnes animas, præsertim illas quæ maxime indigent misericordia tua.";
-    }
-    else if (this.adGranaMaioraLabel === 2 && label.includes("Pater Noster")) {
-      this.adGranaMaioraLabel = 0;
-      pray =
-        "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
-    }
-    this.elements.orandi.innerText = pray;
+    this.elements.orandi.innerText = this.getPray(label);
 
     const cubeLabel = new CSS2DObject(cubeDiv);
 
     object.add(cubeLabel);
     this.three.labelRenderer.render(this.three.scene, this.three.camera);
+  }
+  getLabel(i) {
+    switch (i) {
+      case 0:
+        return "Credo";
+      case 49:
+      case 38:
+      case 27:
+      case 16:
+      case 5:
+        return "Doxologia Minor\nOratio Fatima\nPater Noster";
+      case 1:
+        return "Pater Noster";
+      default:
+        return "Ave Maria";
+    }
+  }
+  getPray(label) {
+    if (!this.adGranaMaioraLabel && label.includes("Doxologia Minor")) {
+      this.adGranaMaioraLabel = 1;
+      this.adGranaMaioraIndex = this.currentNodeIndex;
+      return "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in sæcula sæculorum. Amen.";
+    } else if (
+      this.adGranaMaioraLabel === 1 &&
+      label.includes("Oratio Fatima")
+    ) {
+      this.adGranaMaioraLabel = 2;
+      return "O mi Iesu, dimitte nobis debita nostra, libera nos ab igne inferni, conduc in cælum omnes animas, præsertim illas quæ maxime indigent misericordia tua.";
+    } else if (
+      this.adGranaMaioraLabel === 2 &&
+      label.includes("Pater Noster")
+    ) {
+      this.adGranaMaioraLabel = 0;
+      this.adGranaMaioraIndex = 0;
+      return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
+    }
+
+    switch (label) {
+      case "Credo":
+        return "Credo in Deum Patrem omnipotentem, Creatorem cæli et terræ. Et in Iesum Christum, Filium eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus, descendit ad inferos, tertia die resurrexit a mortuis, ascendit ad cælos, sedet ad dexteram Dei Patris omnipotentis, inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam æternam. Amen.";
+      case "Doxologia Minor\nOratio Fatima\nPater Noster":
+      case "Pater Noster":
+        return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
+      default:
+        return "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostræ. Amen.";
+    }
   }
 }
 
@@ -423,34 +451,6 @@ window.addEventListener(
   false
 );
 
-function getLabel(i) {
-  switch (i) {
-    case 0:
-      return "Credo";
-    case 49:
-    case 38:
-    case 27:
-    case 16:
-    case 5:
-      return "Doxologia Minor\nOratio Fatima\nPater Noster";
-    case 1:
-      return "Pater Noster";
-    default:
-      return "Ave Maria";
-  }
-}
-function getPray(pray) {
-  switch (pray) {
-    case "Credo":
-      return "Credo in Deum Patrem omnipotentem, Creatorem cæli et terræ. Et in Iesum Christum, Filium eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus, descendit ad inferos, tertia die resurrexit a mortuis, ascendit ad cælos, sedet ad dexteram Dei Patris omnipotentis, inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam æternam. Amen.";
-    case "Doxologia Minor\nOratio Fatima\nPater Noster":
-    case "Pater Noster":
-      return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
-    default:
-      return "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostræ. Amen.";
-  }
-}
-
 rosarium.three.labelRenderer.domElement.addEventListener(
   "click",
   (event) => {
@@ -470,7 +470,8 @@ rosarium.three.labelRenderer.domElement.addEventListener(
     if (intersects.length > 0) {
       const object = intersects[0].object;
       if (object.name.includes("node")) {
-        rosarium.selectNode(Number(object.name.split("_")[1]), true);
+        rosarium.selectNode(Number(object.name.split("_")[1]));
+        rosarium.paused = true;
       }
     }
 
