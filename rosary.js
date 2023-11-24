@@ -48,11 +48,7 @@ class Config {
     } else {
       document.getElementById("pause-btn").style.display = "none";
     }
-    const jaculatorium = urlParams.get("jaculatorium");
-    if (jaculatorium?.length) {
-      this.jaculatorium =
-        jaculatorium.split(",").join(" ora pro nobis, ") + " ora pro nobis.";
-    }
+    this.jaculatorium = urlParams.get("jaculatorium");
     this.uiLanguage = urlParams.get("ui-language");
     this.fontSize = urlParams.get("font-size");
   }
@@ -179,7 +175,6 @@ class Rosarium {
   currentNodeIndex = 0;
 
   paused = false;
-  pausedNode = 0;
   pausedPercent = 0;
 
   adGranaMaioraLabel = 0;
@@ -194,6 +189,7 @@ class Rosarium {
     this.elements = {
       orandi: document.getElementById("orandi"),
       progressBar: document.getElementById("progress-bar"),
+      pauseBtn: document.getElementById("pause-btn"),
     };
   }
   configure() {
@@ -207,7 +203,6 @@ class Rosarium {
     if (this.config.beadTime) {
       const p = await progress_bar_round(0, this.config.beadTime);
       if (p) {
-        this.pausedNode = 0;
         return;
       }
 
@@ -215,22 +210,18 @@ class Rosarium {
         this.selectNode(i);
         const p = await progress_bar_round(0, this.config.beadTime);
         if (p) {
-          this.pausedNode = i;
           return;
         }
       }
     }
   }
   async continue_progress_bar() {
-    let i = this.pausedNode;
-    if (this.skipTo) {
-      i = this.skipTo;
-      this.skipTo = undefined;
-    }
+    let i = this.currentNodeIndex;
+    let pausedNode = i
     for (; i < nodesPos.length - 1; i++) {
       this.selectNode(i);
       let p;
-      if (i === this.pausedNode) {
+      if (i === pausedNode) {
         p = await progress_bar_round(
           0,
           this.config.beadTime,
@@ -241,13 +232,14 @@ class Rosarium {
       }
 
       if (p) {
-        this.pausedNode = i;
         return;
       }
     }
   }
   reset_progress_bar() {
-    this.skipTo = this.currentNodeIndex;
+    if (!rosarium.paused) {
+      this.skipTo = this.currentNodeIndex;
+    }
   }
   selectNode(i) {
     if (this.adGranaMaioraLabel) {
@@ -312,19 +304,16 @@ class Rosarium {
     ) {
       if (this.config.jaculatorium?.length) {
         this.adGranaMaioraLabel = 3;
-      } else {
-        this.adGranaMaioraLabel = 0;
-        this.adGranaMaioraIndex = 0;
+        return this.config.jaculatorium;
       }
-
-      return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
-    } else if (
-      this.adGranaMaioraLabel === 3 &&
-      this.config.jaculatorium?.length
-    ) {
       this.adGranaMaioraLabel = 0;
       this.adGranaMaioraIndex = 0;
-      return this.config.jaculatorium;
+
+      return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
+    } else if (this.adGranaMaioraLabel === 3) {
+      this.adGranaMaioraLabel = 0;
+      this.adGranaMaioraIndex = 0;
+      return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
     }
 
     switch (label) {
@@ -336,6 +325,15 @@ class Rosarium {
       default:
         return "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostræ. Amen.";
     }
+  }
+  pause() {
+    rosarium.paused = true;
+    rosarium.elements.pauseBtn.innerHTML = `<svg width="20" height="20" style="color: white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 10 16"> <path d="M3.414 1A2 2 0 0 0 0 2.414v11.172A2 2 0 0 0 3.414 15L9 9.414a2 2 0 0 0 0-2.828L3.414 1Z"/> </svg>`;
+  }
+  play() {
+    rosarium.paused = false;
+    rosarium.elements.pauseBtn.innerHTML = `<svg width="20" height="20" style="color: white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 10 16" > <path fill-rule="evenodd" d="M0 .8C0 .358.32 0 .714 0h1.429c.394 0 .714.358.714.8v14.4c0 .442-.32.8-.714.8H.714a.678.678 0 0 1-.505-.234A.851.851 0 0 1 0 15.2V.8Zm7.143 0c0-.442.32-.8.714-.8h1.429c.19 0 .37.084.505.234.134.15.209.354.209.566v14.4c0 .442-.32.8-.714.8H7.857c-.394 0-.714-.358-.714-.8V.8Z" clip-rule="evenodd" /> </svg>`;
+    rosarium.continue_progress_bar();
   }
 }
 
@@ -354,6 +352,10 @@ async function progress_bar_round(seconds, max, start_from) {
   await new Promise((r) => setTimeout(r, 1000));
   if (percent === 100) {
     return false;
+  }
+  if (rosarium.skipTo) {
+    seconds = 0;
+    rosarium.skipTo = undefined
   }
   if (rosarium.paused) {
     rosarium.pausedPercent = percent;
@@ -496,7 +498,7 @@ rosarium.three.labelRenderer.domElement.addEventListener(
       const object = intersects[0].object;
       if (object.name.includes("node")) {
         rosarium.selectNode(Number(object.name.split("_")[1]));
-        rosarium.paused = true;
+        rosarium.reset_progress_bar();
       }
     }
 
@@ -521,18 +523,17 @@ document.getElementById("cancel").addEventListener("click", () => {
   config_clicked = false;
 });
 
-document.getElementById("pause-btn").addEventListener("click", () => {
-  const val = !rosarium.paused;
-  rosarium.paused = val;
-  if (!val) {
-    rosarium.continue_progress_bar();
+document.getElementById("pause-btn").addEventListener("click", (e) => {
+  if (rosarium.paused) {
+    rosarium.play();
+  } else {
+    rosarium.pause();
   }
 });
 
 document.getElementById("left-btn").addEventListener("click", () => {
   let i = rosarium.currentNodeIndex - 1;
   if (i < 0) i = nodesPos.length - 1;
-  rosarium.paused = true;
   rosarium.selectNode(i);
   rosarium.reset_progress_bar();
 });
@@ -540,7 +541,6 @@ document.getElementById("left-btn").addEventListener("click", () => {
 document.getElementById("right-btn").addEventListener("click", () => {
   let i = rosarium.currentNodeIndex + 1;
   if (i > nodesPos.length - 1) i = 0;
-  rosarium.paused = true;
   rosarium.selectNode(i);
   rosarium.reset_progress_bar();
 });
