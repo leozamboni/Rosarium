@@ -4,12 +4,6 @@
     <meta charset="utf-8" />
     <title>My first three.js app</title>
     <link href="/dist/output.css" rel="stylesheet" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lora&display=swap"
-      rel="stylesheet"
-    />
     <style>
       #leftbar {
         display: none;
@@ -260,6 +254,15 @@
           class="pr-2 scrollbar-w-0.5 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300 overflow-y-scroll"
           style="height: calc(100vh - 425px)"
         >
+  
+          <div class="pb-10 mt-3 border-b border-gray-900/10">
+            <h2 class="text-base font-semibold leading-7 text-black">
+              Mysterium diei
+            </h2>
+            <p id="day" class="text-sm leading-6 text-gray-600"></p>
+            <ul id="mysterium" class="px-4 list-inside list-decimal"></ul>
+          </div>
+
           <div class="pb-10 mt-3 border-b border-gray-900/10">
             <h2 class="text-base font-semibold leading-7 text-black">
               Environment
@@ -326,7 +329,7 @@
                 name="jaculatorium"
                 id="jaculatorium"
                 class="block rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 w-full sm:text-sm sm:leading-6"
-                placeholder="Ex: St Catherine of Siena, St Thomas Aquinas, ..."
+                placeholder="Ex: St Catherine of Siena ora pro nobis, St Thomas Aquinas ora pro nobis, ..."
               ></textarea>
             </div>
           </div>
@@ -365,6 +368,10 @@
               <option value="24pt">24pt</option>
             </select>
           </div>
+
+          <p class="text-sm pt-4 leading-6 text-gray-600">
+            <a href="/" class="text-blue">Home</a>.
+          </p>
         </div>
 
         <div class="mt-6 flex items-center justify-end gap-x-6">
@@ -390,8 +397,8 @@
 
           <div class="card mt-2">
             <img
-              class="rounded hover:grayscale border border-yellow"
-              src="assets/places/st-peters-church-stourton.jpg"
+              class="rounded border border-yellow"
+              src="assets/images/places/st-peters-church-stourton.jpg"
               alt=""
             />
           </div>

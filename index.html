@@ -6,19 +6,13 @@
     <title>Document</title>
     <script defer type="module" src="main.js"></script>
     <link href="/dist/output.css" rel="stylesheet" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lora&display=swap"
-      rel="stylesheet"
-    />
     <style>
       .title {
         font-size: 2.5rem;
       }
 
       .wallpaper {
-        background-image: url("st_catherine_of_siena_receiving_the_crown_of_thorns_from_the_christ_child.jpg");
+        background-image: url("assets/images/st_catherine_of_siena_receiving_the_crown_of_thorns_from_the_christ_child.jpg");
         background-repeat: no-repeat;
         background-size: cover;
       }
@@ -124,6 +118,14 @@
           >
             <div class="pb-10 mt-3 border-b border-gray-900/10">
               <h2 class="text-base font-semibold leading-7 text-black">
+                Mysterium diei
+              </h2>
+              <p id="day" class="text-sm leading-6 text-gray-600"></p>
+              <ul id="mysterium" class="px-4 list-inside list-decimal"></ul>
+            </div>
+
+            <div class="pb-10 mt-3 border-b border-gray-900/10">
+              <h2 class="text-base font-semibold leading-7 text-black">
                 Environment
               </h2>
 
@@ -221,7 +223,7 @@
                   name="jaculatorium"
                   id="jaculatorium"
                   class="block rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 w-full sm:text-sm sm:leading-6"
-                  placeholder="Ex: St Catherine of Siena, St Thomas Aquinas, ..."
+                  placeholder="Ex: St Catherine of Siena ora pro nobis, St Thomas Aquinas ora pro nobis, ..."
                 ></textarea>
               </div>
             </div>

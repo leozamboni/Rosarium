@@ -173,12 +173,57 @@ class Rosarium {
   skipTo;
 
   currentNodeIndex = 0;
+  lastNodeIndex = 0;
 
   paused = false;
   pausedPercent = 0;
 
   adGranaMaioraLabel = 0;
   adGranaMaioraIndex = 0;
+
+  days = [
+    "IV. Mysteria gloriosa (In feria quarta et Dominica)",
+    "I. Mysteria Gaudiosa (In feria secunda et sabbato)",
+    "III. Mysteria dolorosa (In feria tertia et feria sexta)",
+    "IV. Mysteria gloriosa (In feria quarta et Dominica)",
+    "II. Mysteria Luminosa (In feria quinta)",
+    "III. Mysteria dolorosa (In feria tertia et feria sexta)",
+    "I. Mysteria Gaudiosa (In feria secunda et sabbato)",
+  ];
+  currDay;
+
+  mysteria = {
+    I: [
+      "Quem, Virgo, concepisti. [Mt 1:18, Lc 1:26-38]",
+      "Quem visitando Elisabeth portasti. [Lc 1:39-45]",
+      "Quem, Virgo, genuisti. [Lc 2:6-12]",
+      "Quem in templo præsentasti. [Lc 2:25-32]",
+      "Quem in templo invenisti. [Lc 2:41-50]",
+    ],
+    II: [
+      "Qui apud Iordanem baptizatus est. [Mt 3:13, Mc 1:9, Jn 1:29]",
+      "Qui ipsum revelavit apud Canense matrimonium. [In 2:1-11]",
+      "Qui Regnum Dei annuntiavit. [Mc 1:15, Lc 10:8-11]",
+      "Qui transfiguratus est. [Mt 17:1-8, Mc 9:2-9]",
+      "Qui Eucharistiam instituit.[In 6:27-59, Mt 26:26-29, Mc 14:22-24, Lc 22:15-20]",
+    ],
+    III: [
+      "Qui pro nobis sanguinem sudavit. [Lc 22:39-46]",
+      "Qui pro nobis flagellatus est. [Mt 27:26, Mc 15:6-15, In 19:1]",
+      "Qui pro nobis spinis coronatus est. [In 19:1-8]",
+      "Qui pro nobis crucem baiulavit. [In 19:16-22]",
+      "Qui pro nobis crucifixus est. [In 19:25-30]",
+    ],
+    IV: [
+      "Qui resurrexit a mortuis. [Mc 16:1-7]",
+      "Qui in cælum ascendit. [Lc 24:46-53]",
+      "Qui Spiritum Sanctum misit. [Acta 2:1-7]",
+      "Qui te assumpsit. [Ps 16:10]",
+      "Qui te in cælis coronavit. [Apoc 12:1]",
+    ],
+  };
+  currMysterium;
+  currMysteriumIndex = 0;
 
   static mode = "";
   static isDevMode = this.mode === "dev";
@@ -191,6 +236,8 @@ class Rosarium {
       progressBar: document.getElementById("progress-bar"),
       pauseBtn: document.getElementById("pause-btn"),
     };
+    this.currDay = this.days[new Date().getDay()];
+    this.currMysterium = this.mysteria[this.currDay.split(".")[0]];
   }
   configure() {
     this.elements.orandi.style.fontSize = this.config.fontSize;
@@ -217,7 +264,7 @@ class Rosarium {
   }
   async continue_progress_bar() {
     let i = this.currentNodeIndex;
-    let pausedNode = i
+    let pausedNode = i;
     for (; i < nodesPos.length - 1; i++) {
       this.selectNode(i);
       let p;
@@ -244,6 +291,8 @@ class Rosarium {
   selectNode(i) {
     if (this.adGranaMaioraLabel) {
       i = this.adGranaMaioraIndex;
+    } else {
+      this.lastNodeIndex = this.currentNodeIndex;
     }
 
     this.currentNodeIndex = i;
@@ -274,11 +323,17 @@ class Rosarium {
         if (this.adGranaMaioraLabel === 1) {
           return "Oratio Fatima";
         }
+        if (this.adGranaMaioraLabel === 2 && this.lastNodeIndex === 60) {
+          return "Salve, Regina";
+        }
         if (this.adGranaMaioraLabel === 2) {
-          return "Pater Noster";
+          return "Mysterium";
         }
         if (this.adGranaMaioraLabel === 3 && this.config.jaculatorium?.length) {
           return "Jaculatorium";
+        }
+        if (this.adGranaMaioraLabel >= 3) {
+          return "Pater Noster";
         }
         return "Doxologia Minor";
       case 1:
@@ -288,29 +343,31 @@ class Rosarium {
     }
   }
   getPray(label) {
-    if (!this.adGranaMaioraLabel && label.includes("Doxologia Minor")) {
+    if (!this.adGranaMaioraLabel && label === "Doxologia Minor") {
       this.adGranaMaioraLabel = 1;
       this.adGranaMaioraIndex = this.currentNodeIndex;
       return "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in sæcula sæculorum. Amen.";
-    } else if (
-      this.adGranaMaioraLabel === 1 &&
-      label.includes("Oratio Fatima")
-    ) {
+    } else if (this.adGranaMaioraLabel === 1 && label === "Oratio Fatima") {
       this.adGranaMaioraLabel = 2;
       return "O mi Iesu, dimitte nobis debita nostra, libera nos ab igne inferni, conduc in cælum omnes animas, præsertim illas quæ maxime indigent misericordia tua.";
     } else if (
       this.adGranaMaioraLabel === 2 &&
-      label.includes("Pater Noster")
+      (label === "Mysterium" || label === "Salve, Regina")
     ) {
-      if (this.config.jaculatorium?.length) {
-        this.adGranaMaioraLabel = 3;
-        return this.config.jaculatorium;
+      if (label === "Salve, Regina") {
+        this.adGranaMaioraLabel = 0;
+        this.adGranaMaioraIndex = 0;
+        return "Salve, Regina, mater misericordiæ, vita, dulcedo, et spes nostra, salve. Ad te clamamus exsules filii Hevæ. Ad te suspiramus, gementes et flentes in hac lacrimarum valle. Eia, ergo, advocata nostra, illos tuos misericordes oculos ad nos converte. Et Iesum, benedictum fructum ventris tui, nobis post hoc exsilium ostende. O clemens, O pia, O dulcis Virgo Maria.";
       }
-      this.adGranaMaioraLabel = 0;
-      this.adGranaMaioraIndex = 0;
-
-      return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
-    } else if (this.adGranaMaioraLabel === 3) {
+      this.adGranaMaioraLabel = 3;
+      return "Mysterium: " + this.currMysterium[this.currMysteriumIndex++];
+    } else if (this.adGranaMaioraLabel === 3 && label === "Jaculatorium") {
+      this.adGranaMaioraLabel = 4;
+      return this.config.jaculatorium;
+    } else if (
+      (this.adGranaMaioraLabel === 3 || this.adGranaMaioraLabel === 4) &&
+      label === "Pater Noster"
+    ) {
       this.adGranaMaioraLabel = 0;
       this.adGranaMaioraIndex = 0;
       return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
@@ -354,8 +411,8 @@ async function progress_bar_round(seconds, max, start_from) {
     return false;
   }
   if (rosarium.skipTo) {
-    seconds = 0;
-    rosarium.skipTo = undefined
+    seconds = -1;
+    rosarium.skipTo = undefined;
   }
   if (rosarium.paused) {
     rosarium.pausedPercent = percent;
@@ -449,7 +506,6 @@ const nodesPos = [
   { size: 0.033, x: 0.445, y: 0.105, z: 0.04 },
   { size: 0.033, x: 0.445, y: 0.05, z: 0.04 },
   { size: 0.033, x: 0.42, y: 0, z: 0.04 },
-  // { size: 0.033, x: 0.37, y: -0.03, z: 0.04 }, // salve rainha
 ];
 
 nodesPos.map(({ size, x, y, z }, i) =>
@@ -540,7 +596,13 @@ document.getElementById("left-btn").addEventListener("click", () => {
 
 document.getElementById("right-btn").addEventListener("click", () => {
   let i = rosarium.currentNodeIndex + 1;
-  if (i > nodesPos.length - 1) i = 0;
+  if (i > nodesPos.length - 1) i = 5;
   rosarium.selectNode(i);
   rosarium.reset_progress_bar();
 });
+
+document.getElementById("day").innerText = rosarium.currDay;
+
+document.getElementById("mysterium").innerHTML = rosarium.currMysterium
+  .map((e) => "<li>" + e + "</li>")
+  .join("");

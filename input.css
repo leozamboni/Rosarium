@@ -1,7 +1,17 @@
+@font-face {
+    font-family: cmunrm;
+    src: url(assets/font/cmunrm.ttf);
+}
+
+@font-face {
+    font-family: cmunbi;
+    src: url(assets/font/cmunbi.ttf);
+}
+
 body {
     margin: 0;
     padding: 0;
-    font-family: "Lora", serif;
+    font-family: cmunbi;
 }
 
 @tailwind base;
