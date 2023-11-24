@@ -97,6 +97,8 @@ class Three {
     );
     this.controls.enableDamping = true;
     this.controls.enablePan = false;
+    this.controls.maxDistance = 40;
+    this.controls.minDistance = 1.5;
 
     this.raycaster = new THREE.Raycaster();
 
