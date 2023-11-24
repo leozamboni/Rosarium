@@ -223,7 +223,6 @@ class Rosarium {
     ],
   };
   currMysterium;
-  currMysteriumIndex = 0;
 
   static mode = "";
   static isDevMode = this.mode === "dev";
@@ -265,6 +264,9 @@ class Rosarium {
   async continue_progress_bar() {
     let i = this.currentNodeIndex;
     let pausedNode = i;
+    if (this.adGranaMaioraLabel) {
+      this.adGranaMaioraLabel--;
+    }
     for (; i < nodesPos.length - 1; i++) {
       this.selectNode(i);
       let p;
@@ -360,7 +362,10 @@ class Rosarium {
         return "Salve, Regina, mater misericordiæ, vita, dulcedo, et spes nostra, salve. Ad te clamamus exsules filii Hevæ. Ad te suspiramus, gementes et flentes in hac lacrimarum valle. Eia, ergo, advocata nostra, illos tuos misericordes oculos ad nos converte. Et Iesum, benedictum fructum ventris tui, nobis post hoc exsilium ostende. O clemens, O pia, O dulcis Virgo Maria.";
       }
       this.adGranaMaioraLabel = 3;
-      return "Mysterium: " + this.currMysterium[this.currMysteriumIndex++];
+      return (
+        "Mysterium: " +
+        this.currMysterium[Math.round(this.currentNodeIndex / 10) - 1]
+      );
     } else if (this.adGranaMaioraLabel === 3 && label === "Jaculatorium") {
       this.adGranaMaioraLabel = 4;
       return this.config.jaculatorium;
