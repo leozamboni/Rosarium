@@ -1,0 +1,11 @@
+Model Information:
+* title:	Church Of St Peter Stourton
+* source:	https://sketchfab.com/3d-models/church-of-st-peter-stourton-5c65299f7762407686905ca330099245
+* author:	artfletch (https://sketchfab.com/artfletch)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Church Of St Peter Stourton" (https://sketchfab.com/3d-models/church-of-st-peter-stourton-5c65299f7762407686905ca330099245) by artfletch (https://sketchfab.com/artfletch) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

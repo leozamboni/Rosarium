@@ -158,10 +158,10 @@ class Three {
 class Resources {
   models = {
     church_of_st_peter_stourton: {
-      path: "assets/models/church_of_st_peter_stourton",
+      path: "models/church_of_st_peter_stourton",
     },
     rosary: {
-      path: "assets/models/rosary",
+      path: "models/rosary",
     },
   };
 }

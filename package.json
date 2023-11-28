@@ -5,7 +5,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite --host",
+    "build": "vite build",
+    "serve": "vite preview",
+    "build:tailwind": "npx tailwindcss -i ./input.css -o ./dist/output.css --watch"
   },
   "keywords": [],
   "author": "",
