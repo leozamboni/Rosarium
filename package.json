@@ -8,7 +8,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "publish": "node gh-pages.js",
-    "build:tailwind": "npx tailwindcss -i ./input.css -o ./dist/output.css --watch"
+    "build:tailwind": "npx tailwindcss -i ./input.css -o ./public/global.css --watch"
   },
   "keywords": [],
   "author": "",
