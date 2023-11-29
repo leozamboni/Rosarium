@@ -7,7 +7,7 @@
     "dev": "vite --host",
     "build": "vite build",
     "serve": "vite preview",
-    "deploy": "node gh-pages.js",
+    "ghpages": "node gh-pages.js",
     "build:tailwind": "npx tailwindcss -i ./input.css -o ./public/global.css --watch"
   },
   "keywords": [],

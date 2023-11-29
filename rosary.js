@@ -5,7 +5,7 @@ import {
   CSS2DObject,
   CSS2DRenderer,
 } from "three/addons/renderers/CSS2DRenderer.js";
-import { places } from "./places.js";
+import { places, rosaries } from "./map.js";
 
 THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
   document.body.insertAdjacentHTML(
@@ -51,6 +51,8 @@ class Config {
     this.jaculatorium = urlParams.get("jaculatorium");
     this.uiLanguage = urlParams.get("ui-language");
     this.fontSize = urlParams.get("font-size");
+    this.place = urlParams.get("place");
+    this.rosary = "wood_default";
   }
 }
 
@@ -65,7 +67,7 @@ class Three {
   rosaryNodes;
   constructor() {
     this.scene = new THREE.Scene();
-    if (Rosarium.isDevMode) {
+    if (Rosarium.isDevMode()) {
       this.scene.add(new THREE.AxesHelper(10));
     }
 
@@ -110,7 +112,7 @@ class Three {
     const light = new THREE.DirectionalLight(color, intensity);
     callback && callback(light);
     this.scene.add(light);
-    if (Rosarium.isDevMode) {
+    if (Rosarium.isDevMode()) {
       const helper = new THREE.DirectionalLightHelper(light, 5);
       this.scene.add(helper);
     }
@@ -120,7 +122,7 @@ class Three {
     const material = new THREE.MeshBasicMaterial({
       color: 0xffffff,
       transparent: true,
-      opacity: Rosarium.isDevMode ? 0.5 : 0,
+      opacity: Rosarium.isDevMode() ? 0.5 : 0,
     });
     const sphere = new THREE.Mesh(geometry, material);
     callback && callback(sphere);
@@ -129,8 +131,9 @@ class Three {
     this.rosaryNodes.push(sphere);
   }
   loadGLTFModel(model, callback) {
+    if (!model) throw new Error("Resource not find");
     var self = this;
-    new GLTFLoader().load(model.path + "/scene.gltf", async function (gltf) {
+    new GLTFLoader().load(model + "/scene.gltf", async function (gltf) {
       const _model = gltf.scene;
       callback && callback(_model);
 
@@ -155,20 +158,10 @@ class Three {
   }
 }
 
-class Resources {
-  models = {
-    church_of_st_peter_stourton: {
-      path: "models/church_of_st_peter_stourton",
-    },
-    rosary: {
-      path: "models/rosary",
-    },
-  };
-}
-
 class Rosarium {
+  static mode = "";
+
   three;
-  resources;
   config;
   elements;
 
@@ -180,8 +173,8 @@ class Rosarium {
   paused = false;
   pausedPercent = 0;
 
-  adGranaMaioraLabel = 0;
-  adGranaMaioraIndex = 0;
+  fatherNodeLabel = 0;
+  fatherNodeIndex = 0;
 
   days = [
     "IV. Mysteria gloriosa (In feria quarta et Dominica)",
@@ -226,11 +219,26 @@ class Rosarium {
   };
   currMysterium;
 
-  static mode = "";
-  static isDevMode = this.mode === "dev";
+  prays = {
+    "Oratio Fatima":
+      "O mi Iesu, dimitte nobis debita nostra, libera nos ab igne inferni, conduc in cælum omnes animas, præsertim illas quæ maxime indigent misericordia tua.",
+    "Doxologia Minor":
+      "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in sæcula sæculorum. Amen.",
+    Mysterium: () =>
+      "Mysterium: " +
+      this.currMysterium[Math.round(this.currentNodeIndex / 10) - 1],
+    "Salve, Regina":
+      "Salve, Regina, mater misericordiæ, vita, dulcedo, et spes nostra, salve. Ad te clamamus exsules filii Hevæ. Ad te suspiramus, gementes et flentes in hac lacrimarum valle. Eia, ergo, advocata nostra, illos tuos misericordes oculos ad nos converte. Et Iesum, benedictum fructum ventris tui, nobis post hoc exsilium ostende. O clemens, O pia, O dulcis Virgo Maria.",
+    Jaculatorium: () => this.config.jaculatorium,
+    Credo:
+      "Credo in Deum Patrem omnipotentem, Creatorem cæli et terræ. Et in Iesum Christum, Filium eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus, descendit ad inferos, tertia die resurrexit a mortuis, ascendit ad cælos, sedet ad dexteram Dei Patris omnipotentis, inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam æternam. Amen.",
+    "Pater Noster":
+      "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",
+    "Ave Maria":
+      "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostræ. Amen.",
+  };
   constructor() {
     this.three = new Three();
-    this.resources = new Resources();
     this.config = new Config();
     this.elements = {
       orandi: document.getElementById("orandi"),
@@ -245,6 +253,9 @@ class Rosarium {
     if (this.config.beadTime) {
       this.elements.progressBar.style.display = "block";
     }
+  }
+  static isDevMode() {
+    return this.mode === "dev";
   }
   async start_progress_bar() {
     this.selectNode(0);
@@ -266,8 +277,8 @@ class Rosarium {
   async continue_progress_bar() {
     let i = this.currentNodeIndex;
     let pausedNode = i;
-    if (this.adGranaMaioraLabel) {
-      this.adGranaMaioraLabel--;
+    if (this.fatherNodeLabel) {
+      this.fatherNodeLabel--;
     }
     for (; i < nodesPos.length - 1; i++) {
       this.selectNode(i);
@@ -293,8 +304,8 @@ class Rosarium {
     }
   }
   selectNode(i) {
-    if (this.adGranaMaioraLabel) {
-      i = this.adGranaMaioraIndex;
+    if (this.fatherNodeLabel) {
+      i = this.fatherNodeIndex;
     } else {
       this.lastNodeIndex = this.currentNodeIndex;
     }
@@ -315,6 +326,39 @@ class Rosarium {
     object.add(cubeLabel);
     this.three.labelRenderer.render(this.three.scene, this.three.camera);
   }
+
+  isPaterNoster() {
+    return this.fatherNodeLabel >= 3;
+  }
+  isSalveRegina() {
+    return (
+      this.fatherNodeLabel === 2 &&
+      this.lastNodeIndex === 60 &&
+      this.currentNodeIndex === 5
+    );
+  }
+  isMysterium() {
+    return this.fatherNodeLabel === 2;
+  }
+  isJaculatorium() {
+    return this.fatherNodeLabel === 3 && this.config.jaculatorium?.length;
+  }
+  isOratioFatima() {
+    return this.fatherNodeLabel === 1;
+  }
+  incNodeLabel() {
+    this.fatherNodeLabel++;
+  }
+  enterNodeLabel() {
+    this.fatherNodeIndex = this.currentNodeIndex;
+  }
+  exitNodeLabel() {
+    this.fatherNodeLabel = 0;
+  }
+  endNodeLabel() {
+    this.fatherNodeIndex = 0;
+    this.exitNodeLabel();
+  }
   getLabel(i) {
     switch (i) {
       case 0:
@@ -324,21 +368,28 @@ class Rosarium {
       case 27:
       case 16:
       case 5:
-        if (this.adGranaMaioraLabel === 1) {
+        if (this.isOratioFatima()) {
+          this.incNodeLabel();
           return "Oratio Fatima";
         }
-        if (this.adGranaMaioraLabel === 2 && this.lastNodeIndex === 60) {
+        if (this.isSalveRegina()) {
+          this.endNodeLabel();
           return "Salve, Regina";
         }
-        if (this.adGranaMaioraLabel === 2) {
+        if (this.isMysterium()) {
+          this.incNodeLabel();
           return "Mysterium";
         }
-        if (this.adGranaMaioraLabel === 3 && this.config.jaculatorium?.length) {
+        if (this.isJaculatorium()) {
+          this.incNodeLabel();
           return "Jaculatorium";
         }
-        if (this.adGranaMaioraLabel >= 3) {
+        if (this.isPaterNoster()) {
+          this.exitNodeLabel();
           return "Pater Noster";
         }
+        this.enterNodeLabel();
+        this.incNodeLabel();
         return "Doxologia Minor";
       case 1:
         return "Pater Noster";
@@ -347,48 +398,11 @@ class Rosarium {
     }
   }
   getPray(label) {
-    if (!this.adGranaMaioraLabel && label === "Doxologia Minor") {
-      this.adGranaMaioraLabel = 1;
-      this.adGranaMaioraIndex = this.currentNodeIndex;
-      return "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in sæcula sæculorum. Amen.";
-    } else if (this.adGranaMaioraLabel === 1 && label === "Oratio Fatima") {
-      this.adGranaMaioraLabel = 2;
-      return "O mi Iesu, dimitte nobis debita nostra, libera nos ab igne inferni, conduc in cælum omnes animas, præsertim illas quæ maxime indigent misericordia tua.";
-    } else if (
-      this.adGranaMaioraLabel === 2 &&
-      (label === "Mysterium" || label === "Salve, Regina")
-    ) {
-      if (label === "Salve, Regina") {
-        this.adGranaMaioraLabel = 0;
-        this.adGranaMaioraIndex = 0;
-        return "Salve, Regina, mater misericordiæ, vita, dulcedo, et spes nostra, salve. Ad te clamamus exsules filii Hevæ. Ad te suspiramus, gementes et flentes in hac lacrimarum valle. Eia, ergo, advocata nostra, illos tuos misericordes oculos ad nos converte. Et Iesum, benedictum fructum ventris tui, nobis post hoc exsilium ostende. O clemens, O pia, O dulcis Virgo Maria.";
-      }
-      this.adGranaMaioraLabel = 3;
-      return (
-        "Mysterium: " +
-        this.currMysterium[Math.round(this.currentNodeIndex / 10) - 1]
-      );
-    } else if (this.adGranaMaioraLabel === 3 && label === "Jaculatorium") {
-      this.adGranaMaioraLabel = 4;
-      return this.config.jaculatorium;
-    } else if (
-      (this.adGranaMaioraLabel === 3 || this.adGranaMaioraLabel === 4) &&
-      label === "Pater Noster"
-    ) {
-      this.adGranaMaioraLabel = 0;
-      this.adGranaMaioraIndex = 0;
-      return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
+    const p = this.prays[label];
+    if (typeof p === "function") {
+      return p();
     }
-
-    switch (label) {
-      case "Credo":
-        return "Credo in Deum Patrem omnipotentem, Creatorem cæli et terræ. Et in Iesum Christum, Filium eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus, descendit ad inferos, tertia die resurrexit a mortuis, ascendit ad cælos, sedet ad dexteram Dei Patris omnipotentis, inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam æternam. Amen.";
-      case "Doxologia Minor\nOratio Fatima\nPater Noster":
-      case "Pater Noster":
-        return "Pater Noster, qui es in cælis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in cælo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.";
-      default:
-        return "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostræ. Amen.";
-    }
+    return p;
   }
   pause() {
     rosarium.paused = true;
@@ -429,17 +443,20 @@ async function progress_bar_round(seconds, max, start_from) {
 }
 
 rosarium.three.loadGLTFModel(
-  rosarium.resources.models.church_of_st_peter_stourton,
+  places.find((e) => e.id === rosarium.config.place)?.model,
   (model) => {
     model.position.set(-20, -25, 0);
     model.scale.set(10, 10, 10);
   }
 );
 
-rosarium.three.loadGLTFModel(rosarium.resources.models.rosary, (model) => {
-  model.scale.set(10, 10, 10);
-  model.rotation.x = Math.PI / 2;
-});
+rosarium.three.loadGLTFModel(
+  rosaries.find((e) => e.id === rosarium.config.rosary)?.model,
+  (model) => {
+    model.scale.set(10, 10, 10);
+    model.rotation.x = Math.PI / 2;
+  }
+);
 
 rosarium.three.createLight(0xffffff, 3, (l) => {
   l.position.set(5, 5, 5);
@@ -613,3 +630,11 @@ document.getElementById("day").innerText = rosarium.currDay;
 document.getElementById("mysterium").innerHTML = rosarium.currMysterium
   .map((e) => "<li>" + e + "</li>")
   .join("");
+
+const place_hidden_select = document.getElementById("place-hidden-select");
+
+places.map((place, i) => {
+  const option = document.createElement("option");
+  option.value = place.id;
+  place_hidden_select.appendChild(option);
+});
