@@ -15,8 +15,25 @@ Start developer environment
 pnpm dev
 ```
 
-## Adding new places and rosaries
+## Adding new places
 
-See map.js
+See `map.js`
+
+## Adding new rosaries
+
+
+Add to `map.js`; 
+
+Enable the node helpers in `rosary.js` setting the dev mode in Rosarium class:   
+
+```js
+class Rosarium {
+  static mode = "dev"; 
+  ...
+```
+
+Run the project and set the correct node positions.
+
+
 
 <h4 align="center">Vivat Christus Rex!</h4>
