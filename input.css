@@ -1,17 +1,17 @@
 @font-face {
-    font-family: cmunrm;
-    src: url(font/cmunrm.ttf);
-}
-
-@font-face {
-    font-family: cmunbi;
-    src: url(font/cmunbi.ttf);
-}
+    font-family: LTCDeepdene;
+    src: url("font/LTC Deepdene W00 Regular.ttf");
+  }
+  
+  @font-face {
+    font-family: rosecaps;
+    src: url("font/rosecaps.ttf");
+  }
 
 body {
     margin: 0;
     padding: 0;
-    font-family: cmunrm;
+    font-family: LTCDeepdene;
 }
 
 @tailwind base;
