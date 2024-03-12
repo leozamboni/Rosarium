@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rosarium app</title>
+    <title>Rosarium</title>
     <script defer type="module" src="index.js"></script>
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon" />
     <link href="/global.css" rel="stylesheet" />
     <style>
       .title {
@@ -15,6 +16,7 @@
         background-image: url("img/DT5754.jpg");
         background-repeat: no-repeat;
         background-size: cover;
+        box-shadow: 1px -230px 80px -121px rgba(0, 0, 0, 0.713) inset;
       }
 
       /* Split the screen in half */
@@ -101,11 +103,19 @@
     </style>
   </head>
   <body>
-    <div class="split left wallpaper"></div>
+    <div class="split left wallpaper text-center text-white">
+      <p class="text-[1.8vw] mt-[85vh]">
+        <span class="font-bold text-[3vw]">"</span> The Fifteen Mysteries and
+        the Virgin of the Rosary
+      </p>
+      <p class="text-[1.2vw] mt-[-10px] text-gray-300">(possibly Goswin van der Weyden)</p>
+    </div>
     <div class="split right">
-      <div class="text-red-700 flex text-[4vw] translate-title ml-[50%] translate-x-[-35%]">
+      <div
+        class="text-red-700 flex text-[4vw] translate-title ml-[50%] translate-x-[-35%]"
+      >
         <div>
-          <h1 class="text-red-700" style="font-family: rosecaps;">R</h1>
+          <h1 class="text-red-700 font-[rosecaps]">R</h1>
         </div>
         <h1>osarium</h1>
       </div>
@@ -174,7 +184,7 @@
               <div class="mt-2 flex">
                 <div class="inline w-1/4">
                   <label class="block text-sm font-medium leading-6 text-black"
-                    >Auto next</label
+                    >Auto skip</label
                   >
                   <label class="switch">
                     <input id="auto-bead" name="auto-bead" type="checkbox" />
@@ -184,7 +194,7 @@
 
                 <div class="inline w-2/4">
                   <label class="block text-sm font-medium leading-6 text-black"
-                    >Bead time</label
+                    >Time</label
                   >
                   <select
                     id="bead-time"
