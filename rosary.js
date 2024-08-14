@@ -131,7 +131,7 @@ class Three {
     this.rosaryNodes.push(sphere);
   }
   loadGLTFModel(model, callback) {
-    if (!model) throw new Error("Resource not find");
+    if (!model) throw new Error("Resource not found");
     var self = this;
     new GLTFLoader().load(model + "/scene.gltf", async function (gltf) {
       const _model = gltf.scene;
