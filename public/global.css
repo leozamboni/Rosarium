@@ -752,6 +752,14 @@ select {
   --tw-backdrop-sepia:  ;
 }
 
+.visible {
+  visibility: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
 .static {
   position: static;
 }
@@ -801,6 +809,10 @@ select {
   margin-right: 1.25rem;
 }
 
+.mr-\[10px\] {
+  margin-right: 10px;
+}
+
 .mr-\[80px\] {
   margin-right: 80px;
 }
@@ -821,6 +833,10 @@ select {
   margin-top: 1.5rem;
 }
 
+.mt-\[10px\] {
+  margin-top: 10px;
+}
+
 .mt-\[2px\] {
   margin-top: 2px;
 }
@@ -835,14 +851,6 @@ select {
 
 .mt-\[50px\] {
   margin-top: 50px;
-}
-
-.mt-\[10px\] {
-  margin-top: 10px;
-}
-
-.mr-\[10px\] {
-  margin-right: 10px;
 }
 
 .block {
@@ -983,6 +991,10 @@ select {
   border-radius: 0.25rem;
 }
 
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
 .rounded-md {
   border-radius: 0.375rem;
 }
@@ -1006,6 +1018,11 @@ select {
 .border-yellow {
   --tw-border-opacity: 1;
   border-color: rgb(180 146 68 / var(--tw-border-opacity));
+}
+
+.bg-gray-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
 }
 
 .bg-green-600 {
@@ -1176,6 +1193,10 @@ select {
   color: rgb(180 146 68 / var(--tw-text-opacity));
 }
 
+.opacity-0 {
+  opacity: 0;
+}
+
 .shadow {
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
@@ -1209,6 +1230,16 @@ select {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.duration-300 {
+  transition-duration: 300ms;
 }
 
 .ease-out {
@@ -1322,6 +1353,13 @@ select {
 
 .focus-visible\:outline-green-600:focus-visible {
   outline-color: #3b8043;
+}
+
+@media (prefers-color-scheme: dark) {
+  .dark\:bg-gray-700 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+  }
 }
 
 @media (max-width: 1000px) {

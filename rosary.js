@@ -6,6 +6,7 @@ import {
   CSS2DRenderer,
 } from "three/addons/renderers/CSS2DRenderer.js";
 import { Places, Rosaries } from "./map.js";
+import { ENTransl } from "./en-translate.js";
 
 THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
   document.body.insertAdjacentHTML(
@@ -37,6 +38,10 @@ for (const [label, value] of urlParams) {
   }
 }
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 class Config {
   constructor() {
     if (urlParams.get("auto-bead")) {
@@ -51,6 +56,12 @@ class Config {
     this.placeTextureQuality = urlParams.get("place-texture-quality");
     this.rosaryTextureQuality = urlParams.get("rosary-texture-quality");
     this.rosary = urlParams.get("rosary");
+  }
+}
+
+class Translates {
+  constructor() {
+    this.en = ENTransl;
   }
 }
 
@@ -242,9 +253,11 @@ class Rosarium {
     "Ave Maria":
       "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostræ. Amen.",
   };
+
   constructor() {
     this.three = new Three();
     this.config = new Config();
+    this.translates = new Translates();
     this.elements = {
       orandi: document.getElementById("orandi"),
       progressBar: document.getElementById("progress-bar"),
@@ -363,7 +376,25 @@ class Rosarium {
 
     cubeDiv.textContent = label;
 
-    this.elements.orandi.innerText = this.getPray(label);
+    const pray = this.getPray(label);
+
+    let split = pray.split(" ");
+    var html = "";
+    for (let i = 0; i < split.length; i++) {
+      const lower = split[i].replace(/[.,:\s]/g, "").toLowerCase();
+      let translated = this.translates.en[lower];
+      if (/^[A-Z]*$/.test(split[i][0])) {
+        translated = capitalizeFirstLetter(translated)
+      }
+      
+      html += `
+      <span class="tooltip">${split[i]} ${
+        translated ? `<span class="tooltiptext">${translated}</span>` : ""
+      }</span> 
+      `;
+    }
+
+    this.elements.orandi.innerHTML = html;
 
     const cubeLabel = new CSS2DObject(cubeDiv);
 

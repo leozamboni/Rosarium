@@ -1,17 +1,5 @@
 import { Places } from "./map.js";
 
-const isMobile = window.innerWidth <= 800;
-
-console.log(isMobile);
-// if (isMobile) {
-//   const firstDiv = document.getElementsByTagName('div')[0]
-//   firstDiv.innerHTML = ''
-//   firstDiv.classList = []
-
-//   const secondDiv = document.getElementsByTagName('div')[1]
-//   secondDiv.classList.remove('split')
-// }
-
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 
