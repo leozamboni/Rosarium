@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://localhost:5173/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="module" src="./Rosarium_files/client"></script>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rosarium</title>
+    <script defer="" type="module" src="./Rosarium_files/index.js"></script>
+    <link rel="shortcut icon" href="http://localhost:5173/favicon.png" type="image/x-icon">
+    <link href="./Rosarium_files/global.css" rel="stylesheet">
+    <style>
+      .title {
+        font-size: 2.5rem;
+      }
+
+      .wallpaper {
+        background-image: url("goswin_van_der_weyden.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        box-shadow: 1px -230px 80px -121px rgba(0, 0, 0, 0.713) inset;
+      }
+
+      /* The switch - the box around the slider */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 55px;
+        height: 28px;
+      }
+
+      /* Hide default HTML checkbox */
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      /* The slider */
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #d8d8d8;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 4px;
+        bottom: 4px;
+        background-color: #b49244;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      input:checked + .slider {
+        background-color: #3b8043;
+      }
+
+      input:focus + .slider {
+        box-shadow: 0 0 1px #3b8043;
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+      }
+
+      /* Rounded sliders */
+      .slider.round {
+        border-radius: 28px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid grid-cols-2 gap-2">
+      <div class="wallpaper text-center text-white">
+        <div class="absolute bottom-0 text-center">
+          <p class="text-[1.8vw]">
+            The Fifteen Mysteries and the Virgin of the Rosary
+          </p>
+          <p class="text-[1.2vw] text-gray-300">Goswin van der Weyden</p>
+        </div>
+      </div>
+
+      <div>
+        <a class="absolute right-0 text-red-700 cursor-pointer" target="_blank" href="https://github.com/leozamboni/Rosarium">
+          <svg style="margin-right: 10px" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-code">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M7 8l-4 4l4 4"></path>
+            <path d="M17 8l4 4l-4 4"></path>
+            <path d="M14 4l-4 16"></path>
+          </svg>
+        </a>
+
+        <div class="bg-red-200 text-red-700 text-[4vw] max-[800px]:text-[32pt]">
+          <div class="flex ml-[calc(50%+40px)] -translate-x-1/2 max-[800px]:ml-[50%]">
+            <div>
+              <h1 class="text-red-700 font-[rosecaps]">R</h1>
+            </div>
+            <h1>osarium</h1>
+          </div>
+        </div>
+
+        <p class="text-xl leading-6 text-center text-yellow">
+          Crux Sacra sit mihi lux
+        </p>
+
+        <div class="w-[80%] ml-[50%] -translate-x-1/2">
+          <form action="http://localhost:5173/rosary.html">
+            <div class="h-[calc(100%-4vw)] pr-4 scrollbar-w-0.5 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300 overflow-y-scroll">
+              <div class="pb-10 mt-3 border-b border-gray-900/10">
+                <h2 class="text-base font-semibold leading-7 text-black">
+                  Mysterium diei
+                </h2>
+                <p id="day" class="text-sm leading-6 text-gray-600">II. Mysteria Luminosa (In feria quinta)</p>
+                <ul id="mysterium" class="px-4 list-inside list-decimal"><li>Qui apud Iordanem baptizatus est. [Mt 3:13, Mc 1:9, Jn 1:29];</li> <li>Qui ipsum revelavit apud Canense matrimonium. [In 2:1-11];</li> <li>Qui Regnum Dei annuntiavit. [Mc 1:15, Lc 10:8-11];</li> <li>Qui transfiguratus est. [Mt 17:1-8, Mc 9:2-9];</li> <li>Qui Eucharistiam instituit.[In 6:27-59, Mt 26:26-29, Mc 14:22-24, Lc 22:15-20].</li></ul>
+              </div>
+
+              <div class="pb-10 mt-3 border-b border-gray-900/10">
+                <h2 class="text-base font-semibold leading-7 text-black">
+                  Environment
+                </h2>
+
+                <select name="place" id="place-hidden-select" class="hidden"><option value="church_of_st_peter_stourton"></option></select>
+
+                <select name="rosary" id="rosary-hidden-select" class="hidden">
+                  <option value="rosary_default">Wood default</option>
+                </select>
+
+                <label class="block text-sm font-medium leading-6 text-black">Place</label>
+                <div id="place-list" style="background-color: #d8d8d8" class="py-2 rounded-md whitespace-nowrap overflow-x-scroll scrollbar-h-2 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300"><div id="church_of_st_peter_stourton" class="cursor-pointer inline-block bg-white h-full rounded shadow mx-2 px-2 py-2" style="width: 200px; border: 2px solid green;"><img class="rounded" src="./Rosarium_files/image.jpg" alt="" id="church_of_st_peter_stourton"><p class="text-sm ">St Peter's Church, Stourton.</p></div></div>
+
+                <label class="block text-sm font-medium leading-6 text-black">Place texture quality</label>
+                <select name="place-texture-quality" id="place-texture-quality" class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6">
+                  <option value="default.glb">Default</option>
+                  <option value="4k.glb">4k</option>
+                  <option value="8k.glb">8k</option>
+                </select>
+
+                <label class="block text-sm font-medium leading-6 text-black">Rosary</label>
+                <select name="rosary" id="rosary" disabled="" class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6">
+                  <option value="rosary_default">Wood default</option>
+                </select>
+
+                <label class="block text-sm font-medium leading-6 text-black">Rosary texture quality</label>
+                <select name="rosary-texture-quality" id="rosary-texture-quality" class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6">
+                  <option value="default.glb">Default</option>
+                  <option value="4k.glb">4k</option>
+                </select>
+              </div>
+
+              <div class="pb-10 mt-3 border-b border-gray-900/10">
+                <h2 class="text-base font-semibold leading-7 text-black">
+                  Rosary
+                </h2>
+
+                <div class="mt-2 flex">
+                  <div class="inline w-1/4">
+                    <label class="block text-sm font-medium leading-6 text-black">Auto skip</label>
+                    <label class="switch">
+                      <input id="auto-bead" name="auto-bead" type="checkbox">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+
+                  <div class="inline w-2/4">
+                    <label class="block text-sm font-medium leading-6 text-black">Time</label>
+                    <select id="bead-time" name="bead-time" class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                      <option value="30s">30s.</option>
+                      <option value="40s">40s.</option>
+                      <option value="50s">50s.</option>
+                      <option value="60s">1min.</option>
+                      <option value="120s">2min.</option>
+                      <option value="180s">3min.</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mt-2">
+                  <label class="block text-sm font-medium leading-6 text-black">Jaculatorium</label>
+                  <textarea name="jaculatorium" id="jaculatorium" class="block rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 w-full sm:text-sm sm:leading-6" placeholder="Ex: St Catherine of Siena ora pro nobis, St Thomas Aquinas ora pro nobis, ..."></textarea>
+                </div>
+              </div>
+
+              <h2 class="text-base mt-3 font-semibold leading-7 text-black">
+                General
+              </h2>
+
+              <div class="mt-2">
+                <label class="block text-sm font-medium leading-6 text-black">UI Language</label>
+                <select disabled="" name="ui-language" id="ui-language" class="focus:ring-green-600 block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset">
+                  <option value="english">English</option>
+                  <option value="portuguese">Portuguese</option>
+                </select>
+              </div>
+
+              <div class="mt-2">
+                <label class="block text-sm font-medium leading-6 text-black">Font size</label>
+                <select name="font-size" id="font-size" class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600">
+                  <option value="10pt">10pt</option>
+                  <option value="12pt">12pt</option>
+                  <option value="14pt">14pt</option>
+                  <option value="16pt" selected="selected">16pt</option>
+                  <option value="18pt">18pt</option>
+                  <option value="24pt">24pt</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="text-center mt-10">
+              <button id="start-btn" type="submit" class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
+                Enter
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  
+
+</body></html>
