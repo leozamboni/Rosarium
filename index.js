@@ -1,4 +1,16 @@
-import { places } from "./map.js";
+import { Places } from "./map.js";
+
+const isMobile = window.innerWidth <= 800;
+
+console.log(isMobile);
+// if (isMobile) {
+//   const firstDiv = document.getElementsByTagName('div')[0]
+//   firstDiv.innerHTML = ''
+//   firstDiv.classList = []
+
+//   const secondDiv = document.getElementsByTagName('div')[1]
+//   secondDiv.classList.remove('split')
+// }
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -19,12 +31,13 @@ for (const [label, value] of urlParams) {
 
 const place_list = document.getElementById("place-list");
 const place_hidden_select = document.getElementById("place-hidden-select");
+const place_texture_quality = document.getElementById("place-texture-quality");
 
-let place_id_selected = places[0].id;
+let place_id_selected = Places[0].id;
 
-places.map((place, i) => {
-  const img = `<img class="rounded" src="${place.img}" alt="" />`;
-  const span = `<p class="text-sm ">${place.span}</p>`;
+Places.map((place, i) => {
+  const img = `<img class="rounded" src="models/${place.id}/image.jpg" alt="" id="${place.id}" />`;
+  const span = `<p class="text-sm ">${place.title}</p>`;
 
   const option = document.createElement("option");
   option.value = place.id;
@@ -55,8 +68,21 @@ places.map((place, i) => {
   });
 });
 
-document.getElementById("start-btn").addEventListener("submit", () => {
-  console.log(place_id_selected);
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+document.getElementById("place-list").addEventListener("click", (e) => {
+  if (!e.target.id || e.target.id === "place-list") return;
+  place_texture_quality.innerHTML = "";
+  const place = Places.find((place) => place.id === e.target.id);
+  const opts = place.models.map(
+    (model) =>
+      `<option  value="${model}">${capitalizeFirstLetter(
+        model.replace(".glb", "")
+      )}</option>`
+  );
+  place_texture_quality.innerHTML = opts;
 });
 
 const days = [

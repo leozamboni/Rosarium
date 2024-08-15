@@ -1,11 +1,11 @@
 @font-face {
     font-family: LTCDeepdene;
-    src: url("font/LTC Deepdene W00 Regular.ttf");
+    src: url("ltcdeepdene.ttf");
   }
   
   @font-face {
     font-family: rosecaps;
-    src: url("font/rosecaps.ttf");
+    src: url("rosecaps.ttf");
   }
 
 body {

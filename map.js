@@ -1,14 +1,14 @@
-export const places = [
+export const Places = [
   {
     id: "church_of_st_peter_stourton",
-    span: "St Peter's Church, Stourton.",
-    img: "img/places/st-peters-church-stourton.jpg",
-    model: "3d/church_of_st_peter_stourton",
+    title: "St Peter's Church, Stourton.",
+    models: ["default.glb", "4k.glb", "8k.glb"],
   },
 ];
-export const rosaries = [
+export const Rosaries = [
   {
-    id: "wood_default",
-    model: "3d/rosary",
+    id: "rosary_default",
+    title: "Wood default",
+    models: ["default.glb", "4k.glb"],
   },
 ];

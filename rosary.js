@@ -5,7 +5,7 @@ import {
   CSS2DObject,
   CSS2DRenderer,
 } from "three/addons/renderers/CSS2DRenderer.js";
-import { places, rosaries } from "./map.js";
+import { Places, Rosaries } from "./map.js";
 
 THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
   document.body.insertAdjacentHTML(
@@ -38,10 +38,6 @@ for (const [label, value] of urlParams) {
 }
 
 class Config {
-  beadTime;
-  fontSize;
-  jaculatorium;
-  uiLanguage;
   constructor() {
     if (urlParams.get("auto-bead")) {
       this.beadTime = Number(urlParams.get("bead-time").replace(/[^0-9]/g, ""));
@@ -52,7 +48,9 @@ class Config {
     this.uiLanguage = urlParams.get("ui-language");
     this.fontSize = urlParams.get("font-size");
     this.place = urlParams.get("place");
-    this.rosary = "wood_default";
+    this.placeTextureQuality = urlParams.get("place-texture-quality");
+    this.rosaryTextureQuality = urlParams.get("rosary-texture-quality");
+    this.rosary = urlParams.get("rosary");
   }
 }
 
@@ -130,17 +128,24 @@ class Three {
     this.scene.add(sphere);
     this.rosaryNodes.push(sphere);
   }
-  loadGLTFModel(model, callback) {
-    if (!model) throw new Error("Resource not found");
-    var self = this;
-    new GLTFLoader().load(model + "/scene.gltf", async function (gltf) {
-      const _model = gltf.scene;
-      callback && callback(_model);
+  loadGLTFModel(place, quality, callback) {
+    if (!place) throw new Error("Resource not found");
 
-      await self.renderer.compileAsync(_model, self.camera, self.scene);
+    try {
+      const modelDir = "models/" + place.id + "/" + quality;
 
-      self.scene.add(_model);
-    });
+      var self = this;
+      new GLTFLoader().load(modelDir, async function (gltf) {
+        const _model = gltf.scene;
+        callback && callback(_model);
+
+        await self.renderer.compileAsync(_model, self.camera, self.scene);
+
+        self.scene.add(_model);
+      });
+    } catch (e) {
+      throw new Error(e);
+    }
   }
   eventResize() {
     this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -244,14 +249,47 @@ class Rosarium {
       orandi: document.getElementById("orandi"),
       progressBar: document.getElementById("progress-bar"),
       pauseBtn: document.getElementById("pause-btn"),
+      placeTitle: document.getElementById("place-title"),
+      rosaryTitle: document.getElementById("rosary-title"),
     };
     this.currDay = this.days[new Date().getDay()];
     this.currMysterium = this.mysteria[this.currDay.split(".")[0]];
+    try {
+      this.place = Places.find((place) => place.id === this.config.place);
+      this.rosary = Rosaries.find((rosary) => rosary.id === this.config.rosary);
+    } catch {
+      throw new Error("3D load failed");
+    }
+    this.isMobile = window.innerWidth <= 1000;
   }
   configure() {
     this.elements.orandi.style.fontSize = this.config.fontSize;
     if (this.config.beadTime) {
       this.elements.progressBar.style.display = "block";
+    }
+    this.elements.placeTitle.innerText = `Place: ${
+      this.place.title
+    } (${this.config.placeTextureQuality.replace(".glb", "")})`;
+    this.elements.rosaryTitle.innerText = `Rosary: ${
+      this.rosary.title
+    } (${this.config.rosaryTextureQuality.replace(".glb", "")})`;
+
+    if (this.isMobile) {
+      const icons = document.getElementsByTagName("svg");
+      const ul = document.getElementsByTagName("ul")[0];
+      const leftbar = document.getElementById("leftbar");
+      leftbar.style.width = "100vw";
+      ul.classList.add("mr-[80px]");
+
+      this.elements.orandi.style.fontSize =
+        Number(this.config.fontSize.replace("pt", "")) * 2 + "pt";
+
+      for (let icon of icons) {
+        icon.classList = [];
+        icon.classList.add("mt-[50px]");
+        icon.classList.add("w-[50px]");
+        icon.classList.add("h-[50px]");
+      }
     }
   }
   static isDevMode() {
@@ -317,6 +355,12 @@ class Rosarium {
     const label = this.getLabel(i);
     const cubeDiv = document.createElement("pre");
     cubeDiv.className = "label";
+
+    if (this.isMobile) {
+      cubeDiv.style.fontSize =
+        Number(this.config.fontSize.replace("pt", "")) * 2 + "pt";
+    }
+
     cubeDiv.textContent = label;
 
     this.elements.orandi.innerText = this.getPray(label);
@@ -443,7 +487,8 @@ async function progress_bar_round(seconds, max, start_from) {
 }
 
 rosarium.three.loadGLTFModel(
-  places.find((e) => e.id === rosarium.config.place)?.model,
+  rosarium.place,
+  rosarium.config.placeTextureQuality,
   (model) => {
     model.position.set(-20, -25, 0);
     model.scale.set(10, 10, 10);
@@ -451,7 +496,8 @@ rosarium.three.loadGLTFModel(
 );
 
 rosarium.three.loadGLTFModel(
-  rosaries.find((e) => e.id === rosarium.config.rosary)?.model,
+  rosarium.rosary,
+  rosarium.config.rosaryTextureQuality,
   (model) => {
     model.scale.set(10, 10, 10);
     model.rotation.x = Math.PI / 2;
@@ -633,7 +679,7 @@ document.getElementById("mysterium").innerHTML = rosarium.currMysterium
 
 const place_hidden_select = document.getElementById("place-hidden-select");
 
-places.map((place, i) => {
+Places.map((place, i) => {
   const option = document.createElement("option");
   option.value = place.id;
   place_hidden_select.appendChild(option);

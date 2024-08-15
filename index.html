@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rosarium</title>
     <script defer type="module" src="index.js"></script>
-    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
     <link href="/global.css" rel="stylesheet" />
     <style>
       .title {
@@ -13,29 +13,10 @@
       }
 
       .wallpaper {
-        background-image: url("img/DT5754.jpg");
+        background-image: url("goswin_van_der_weyden.jpg");
         background-repeat: no-repeat;
         background-size: cover;
         box-shadow: 1px -230px 80px -121px rgba(0, 0, 0, 0.713) inset;
-      }
-
-      /* Split the screen in half */
-      .split {
-        height: 100%;
-        width: 50%;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        overflow-x: hidden;
-        padding-top: 20px;
-      }
-
-      .left {
-        left: 0;
-      }
-
-      .right {
-        right: 0;
       }
 
       /* The switch - the box around the slider */
@@ -103,200 +84,233 @@
     </style>
   </head>
   <body>
-    <div class="split left wallpaper text-center text-white">
-      <div class="absolute bottom-0 w-full text-center">
-        <p class="text-[1.8vw]">
-          The Fifteen Mysteries and the Virgin of the Rosary
-        </p>
-        <p class="text-[1.2vw] mt-[-10px] text-gray-300">
-          Goswin van der Weyden
-        </p>
-      </div>
-    </div>
-    <div class="split right">
-      <a class="absolute right-0 text-red-700 cursor-pointer" target="_blank" href="https://github.com/leozamboni/Rosarium">
-        <svg
-        style="margin-right: 10px;"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="icon icon-tabler icons-tabler-outline icon-tabler-code"
-      >
-        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        <path d="M7 8l-4 4l4 4" />
-        <path d="M17 8l4 4l-4 4" />
-        <path d="M14 4l-4 16" />
-      </svg>
-    </a>
-      
-      
-      <div
-        class="text-red-700 flex text-[4vw] translate-title ml-[50%] translate-x-[-35%]"
-      >
-        <div>
-          <h1 class="text-red-700 font-[rosecaps]">R</h1>
+    <div class="grid grid-cols-2 gap-2 max-[800px]:grid-cols-1">
+      <div class="wallpaper text-white">
+        <div class="absolute bottom-0 text-center pl-[50%] -translate-x-1/2">
+          <p class="text-[1.8vw]">
+            The Fifteen Mysteries and the Virgin of the Rosary
+          </p>
+          <p class="text-[1.2vw] text-gray-300">Goswin van der Weyden</p>
         </div>
-        <h1>osarium</h1>
       </div>
 
-      <p class="text-xl leading-6 text-center text-yellow">
-        Crux Sacra sit mihi lux
-      </p>
-
-      <div style="margin: 0px 100px 0 100px">
-        <form action="rosary.html">
-          <div
-            class="pr-4 scrollbar-w-0.5 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300 overflow-y-scroll"
-            style="height: calc(100vh - 180px - 4vw)"
+      <div class="h-screen max-[800px]:h-full">
+        <a
+          class="absolute right-0 text-red-700 cursor-pointer"
+          target="_blank"
+          href="https://github.com/leozamboni/Rosarium"
+        >
+          <svg
+            style="margin-right: 10px"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-code"
           >
-            <div class="pb-10 mt-3 border-b border-gray-900/10">
-              <h2 class="text-base font-semibold leading-7 text-black">
-                Mysterium diei
-              </h2>
-              <p id="day" class="text-sm leading-6 text-gray-600"></p>
-              <ul id="mysterium" class="px-4 list-inside list-decimal"></ul>
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M7 8l-4 4l4 4" />
+            <path d="M17 8l4 4l-4 4" />
+            <path d="M14 4l-4 16" />
+          </svg>
+        </a>
+
+        <div class="text-red-700 text-[4vw] max-[800px]:text-[32pt]">
+          <div
+            class="text-center flex ml-[50%] -translate-x-1/2 items-center justify-center"
+          >
+            <div>
+              <h1 class="text-red-700 font-[rosecaps]">R</h1>
             </div>
-
-            <div class="pb-10 mt-3 border-b border-gray-900/10">
-              <h2 class="text-base font-semibold leading-7 text-black">
-                Environment
-              </h2>
-
-              <select
-                name="place"
-                id="place-hidden-select"
-                class="hidden"
-              ></select>
-
-              <select name="rosary" id="rosary-hidden-select" class="hidden">
-                <option value="wood_default">Wood default</option>
-              </select>
-
-              <label class="block text-sm font-medium leading-6 text-black"
-                >Place</label
-              >
-
-              <div
-                id="place-list"
-                style="background-color: #d8d8d8"
-                class="py-2 rounded-md whitespace-nowrap overflow-x-scroll scrollbar-h-2 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300"
-              ></div>
-
-              <label class="block text-sm font-medium leading-6 text-black"
-                >Rosary</label
-              >
-              <select
-                name="rosary"
-                id="rosary"
-                disabled
-                class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
-              >
-                <option value="wood_default">Wood default</option>
-              </select>
-            </div>
-
-            <div class="pb-10 mt-3 border-b border-gray-900/10">
-              <h2 class="text-base font-semibold leading-7 text-black">
-                Rosary
-              </h2>
-
-              <div class="mt-2 flex">
-                <div class="inline w-1/4">
-                  <label class="block text-sm font-medium leading-6 text-black"
-                    >Auto skip</label
-                  >
-                  <label class="switch">
-                    <input id="auto-bead" name="auto-bead" type="checkbox" />
-                    <span class="slider round"></span>
-                  </label>
-                </div>
-
-                <div class="inline w-2/4">
-                  <label class="block text-sm font-medium leading-6 text-black"
-                    >Time</label
-                  >
-                  <select
-                    id="bead-time"
-                    name="bead-time"
-                    class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                  >
-                    <option value="30s">30s.</option>
-                    <option value="40s">40s.</option>
-                    <option value="50s">50s.</option>
-                    <option value="60s">1min.</option>
-                    <option value="120s">2min.</option>
-                    <option value="180s">3min.</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="mt-2">
-                <label class="block text-sm font-medium leading-6 text-black"
-                  >Jaculatorium</label
-                >
-                <textarea
-                  name="jaculatorium"
-                  id="jaculatorium"
-                  class="block rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 w-full sm:text-sm sm:leading-6"
-                  placeholder="Ex: St Catherine of Siena ora pro nobis, St Thomas Aquinas ora pro nobis, ..."
-                ></textarea>
-              </div>
-            </div>
-
-            <h2 class="text-base mt-3 font-semibold leading-7 text-black">
-              General
-            </h2>
-
-            <div class="mt-2">
-              <label class="block text-sm font-medium leading-6 text-black"
-                >UI Language</label
-              >
-              <select
-                disabled
-                name="ui-language"
-                id="ui-language"
-                class="focus:ring-green-600 block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset"
-              >
-                <option value="english">English</option>
-                <option value="portuguese">Portuguese</option>
-              </select>
-            </div>
-
-            <div class="mt-2">
-              <label class="block text-sm font-medium leading-6 text-black"
-                >Font size</label
-              >
-              <select
-                name="font-size"
-                id="font-size"
-                class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600"
-              >
-                <option value="10pt">10pt</option>
-                <option value="12pt">12pt</option>
-                <option value="14pt">14pt</option>
-                <option value="16pt" selected="selected">16pt</option>
-                <option value="18pt">18pt</option>
-                <option value="24pt">24pt</option>
-              </select>
-            </div>
+            <h1>osarium</h1>
           </div>
+        </div>
 
-          <div class="text-center mt-10">
-            <button
-              id="start-btn"
-              type="submit"
-              class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+        <p class="text-xl leading-6 text-center text-yellow">
+          Crux Sacra sit mihi lux
+        </p>
+
+        <div
+          class="w-[80%] ml-[50%] -translate-x-1/2 h-[calc(100vh-4vw-130px)]"
+        >
+          <form action="rosary.html" class="h-full">
+            <div
+              class="pr-[2px] h-[95%] scrollbar-w-0.5 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300 overflow-y-scroll"
             >
-              Enter
-            </button>
-          </div>
-        </form>
+              <div class="pb-10 mt-[3px] border-b border-gray-900/10">
+                <h2 class="text-base font-semibold leading-7 text-black">
+                  Mysterium diei
+                </h2>
+                <p id="day" class="text-sm leading-6 text-gray-600"></p>
+                <ul id="mysterium" class="px-4 list-inside list-decimal"></ul>
+              </div>
+
+              <div class="pb-10 mt-[3px] border-b border-gray-900/10">
+                <h2 class="text-base font-semibold leading-7 text-black">
+                  Environment
+                </h2>
+
+                <select
+                  name="place"
+                  id="place-hidden-select"
+                  class="hidden"
+                ></select>
+
+                <select name="rosary" id="rosary-hidden-select" class="hidden">
+                  <option value="rosary_default">Wood default</option>
+                </select>
+
+                <label class="block text-sm font-medium leading-6 text-black"
+                  >Place</label
+                >
+                <div
+                  id="place-list"
+                  style="background-color: #d8d8d8"
+                  class="py-2 rounded-md whitespace-nowrap overflow-x-scroll scrollbar-h-2 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300"
+                ></div>
+
+                <label class="block text-sm font-medium leading-6 text-black"
+                  >Place texture quality</label
+                >
+                <select
+                  name="place-texture-quality"
+                  id="place-texture-quality"
+                  class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+                >
+                  <option value="default.glb">Default</option>
+                  <option value="4k.glb">4k</option>
+                  <option value="8k.glb">8k</option>
+                </select>
+
+                <label class="block text-sm font-medium leading-6 text-black"
+                  >Rosary</label
+                >
+                <select
+                  name="rosary"
+                  id="rosary"
+                  disabled
+                  class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+                >
+                  <option value="rosary_default">Wood default</option>
+                </select>
+
+                <label class="block text-sm font-medium leading-6 text-black"
+                  >Rosary texture quality</label
+                >
+                <select
+                  name="rosary-texture-quality"
+                  id="rosary-texture-quality"
+                  class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+                >
+                  <option value="default.glb">Default</option>
+                  <option value="4k.glb">4k</option>
+                </select>
+              </div>
+
+              <div class="pb-10 mt-[3px] border-b border-gray-900/10">
+                <h2 class="text-base font-semibold leading-7 text-black">
+                  Rosary
+                </h2>
+
+                <div class="mt-[2px] flex">
+                  <div class="inline w-1/4">
+                    <label
+                      class="block text-sm font-medium leading-6 text-black"
+                      >Auto skip</label
+                    >
+                    <label class="switch">
+                      <input id="auto-bead" name="auto-bead" type="checkbox" />
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+
+                  <div class="inline w-2/4">
+                    <label
+                      class="block text-sm font-medium leading-6 text-black"
+                      >Time</label
+                    >
+                    <select
+                      id="bead-time"
+                      name="bead-time"
+                      class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                    >
+                      <option value="30s">30s.</option>
+                      <option value="40s">40s.</option>
+                      <option value="50s">50s.</option>
+                      <option value="60s">1min.</option>
+                      <option value="120s">2min.</option>
+                      <option value="180s">3min.</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mt-[2px]">
+                  <label class="block text-sm font-medium leading-6 text-black"
+                    >Jaculatorium</label
+                  >
+                  <textarea
+                    name="jaculatorium"
+                    id="jaculatorium"
+                    class="block rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 w-full sm:text-sm sm:leading-6"
+                    placeholder="Ex: St Catherine of Siena ora pro nobis, St Thomas Aquinas ora pro nobis, ..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <h2 class="text-base mt-[3px] font-semibold leading-7 text-black">
+                General
+              </h2>
+
+              <div class="mt-[2px]">
+                <label class="block text-sm font-medium leading-6 text-black"
+                  >UI Language</label
+                >
+                <select
+                  disabled
+                  name="ui-language"
+                  id="ui-language"
+                  class="focus:ring-green-600 block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset"
+                >
+                  <option value="english">English</option>
+                  <option value="portuguese">Portuguese</option>
+                </select>
+              </div>
+
+              <div class="mt-[2px]">
+                <label class="block text-sm font-medium leading-6 text-black"
+                  >Font size</label
+                >
+                <select
+                  name="font-size"
+                  id="font-size"
+                  class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600"
+                >
+                  <option value="10pt">10pt</option>
+                  <option value="12pt">12pt</option>
+                  <option value="14pt">14pt</option>
+                  <option value="16pt" selected="selected">16pt</option>
+                  <option value="18pt">18pt</option>
+                  <option value="24pt">24pt</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="text-center mt-[30px]">
+              <button
+                id="start-btn"
+                type="submit"
+                class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+              >
+                Enter
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </body>
