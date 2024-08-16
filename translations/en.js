@@ -1,4 +1,5 @@
-export const ENTransl = {
+// Translated by Google Translator
+const EN = {
   quem: "whom",
   virgo: "virgin",
   concepisti: "you conceived",
@@ -143,8 +144,8 @@ export const ENTransl = {
   virgine: "a virgin",
   passus: "suffering",
   sub: "under",
-  pontio: "bridge",
-  pilato: "pilates",
+  pontio: "Pontius",
+  pilato: "Pilate",
   mortuus: "dead",
   sepultus: "buried",
   descendit: "came down",
@@ -195,7 +196,7 @@ export const ENTransl = {
   tentationem: "temptation",
   sed: "but",
   malo: "bad",
-  ave: "bird",
+  ave: "hail",
   gratia: "grace",
   plena: "full",
   dominus: "owner",
@@ -213,3 +214,5 @@ export const ENTransl = {
   mortis: "of death",
   nostræ: "ours",
 };
+
+export default EN

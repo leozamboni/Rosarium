@@ -6,7 +6,7 @@ import {
   CSS2DRenderer,
 } from "three/addons/renderers/CSS2DRenderer.js";
 import { Places, Rosaries } from "./map.js";
-import { ENTransl } from "./en-translate.js";
+import * as Translations from "./translations";
 
 THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
   document.body.insertAdjacentHTML(
@@ -18,7 +18,7 @@ THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
 THREE.DefaultLoadingManager.onLoad = function () {
   const e = document.getElementById("loading-text");
   e.parentNode.removeChild(e);
-  rosarium.start_progress_bar();
+  rosarium.startProgressBar();
 };
 
 const queryString = window.location.search;
@@ -38,10 +38,6 @@ for (const [label, value] of urlParams) {
   }
 }
 
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 class Config {
   constructor() {
     if (urlParams.get("auto-bead")) {
@@ -56,12 +52,20 @@ class Config {
     this.placeTextureQuality = urlParams.get("place-texture-quality");
     this.rosaryTextureQuality = urlParams.get("rosary-texture-quality");
     this.rosary = urlParams.get("rosary");
+    this.translation = urlParams.get("translation");
   }
 }
 
 class Translates {
   constructor() {
-    this.en = ENTransl;
+    this.en = Translations.EN;
+    this["pt-br"] = Translations.PTBR;
+  }
+}
+
+class Utils {
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 }
 
@@ -256,8 +260,9 @@ class Rosarium {
 
   constructor() {
     this.three = new Three();
+    this.utils = new Utils();
     this.config = new Config();
-    this.translates = new Translates();
+    this.translations = new Translates();
     this.elements = {
       orandi: document.getElementById("orandi"),
       progressBar: document.getElementById("progress-bar"),
@@ -280,6 +285,15 @@ class Rosarium {
     if (this.config.beadTime) {
       this.elements.progressBar.style.display = "block";
     }
+
+    if (this.config.translation) {
+      try {
+        this.translation = this.translations[this.config.translation];
+      } catch (e) {
+        throw new Error("Translation not found");
+      }
+    }
+
     this.elements.placeTitle.innerText = `Place: ${
       this.place.title
     } (${this.config.placeTextureQuality.replace(".glb", "")})`;
@@ -308,24 +322,24 @@ class Rosarium {
   static isDevMode() {
     return this.mode === "dev";
   }
-  async start_progress_bar() {
+  async startProgressBar() {
     this.selectNode(0);
     if (this.config.beadTime) {
-      const p = await progress_bar_round(0, this.config.beadTime);
+      const p = await progressBarRound(0, this.config.beadTime);
       if (p) {
         return;
       }
 
       for (let i = 1; i < nodesPos.length - 1; i++) {
         this.selectNode(i);
-        const p = await progress_bar_round(0, this.config.beadTime);
+        const p = await progressBarRound(0, this.config.beadTime);
         if (p) {
           return;
         }
       }
     }
   }
-  async continue_progress_bar() {
+  async continueProgressBar() {
     let i = this.currentNodeIndex;
     let pausedNode = i;
     if (this.fatherNodeLabel) {
@@ -335,13 +349,9 @@ class Rosarium {
       this.selectNode(i);
       let p;
       if (i === pausedNode) {
-        p = await progress_bar_round(
-          0,
-          this.config.beadTime,
-          this.pausedPercent
-        );
+        p = await progressBarRound(0, this.config.beadTime, this.pausedPercent);
       } else {
-        p = await progress_bar_round(0, this.config.beadTime);
+        p = await progressBarRound(0, this.config.beadTime);
       }
 
       if (p) {
@@ -349,7 +359,7 @@ class Rosarium {
       }
     }
   }
-  reset_progress_bar() {
+  resetProgressBar() {
     if (!rosarium.paused) {
       this.skipTo = this.currentNodeIndex;
     }
@@ -382,14 +392,23 @@ class Rosarium {
     var html = "";
     for (let i = 0; i < split.length; i++) {
       const lower = split[i].replace(/[.,:\s]/g, "").toLowerCase();
-      let translated = this.translates.en[lower];
-      if (/^[A-Z]*$/.test(split[i][0])) {
-        translated = capitalizeFirstLetter(translated)
+      let translated = this.translation[lower];
+      if (translated && /^[A-Z]*$/.test(split[i][0])) {
+        translated = this.utils.capitalizeFirstLetter(translated);
       }
-      
+
       html += `
       <span class="tooltip">${split[i]} ${
-        translated ? `<span class="tooltiptext">${translated}</span>` : ""
+        translated
+          ? `
+        <span class="tooltiptext">  
+        <svg class="flex float-left" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48">
+<path fill="#CFD8DC" d="M15,13h25c1.104,0,2,0.896,2,2v25c0,1.104-0.896,2-2,2H26L15,13z"></path><path fill="#546E7A" d="M26.832,34.854l-0.916-1.776l0.889-0.459c0.061-0.031,6.101-3.208,9.043-9.104l0.446-0.895l1.79,0.893l-0.447,0.895c-3.241,6.496-9.645,9.85-9.916,9.989L26.832,34.854z"></path><path fill="#546E7A" d="M38.019 34l-.87-.49c-.207-.116-5.092-2.901-8.496-7.667l1.627-1.162c3.139 4.394 7.805 7.061 7.851 7.087L39 32.26 38.019 34zM26 22H40V24H26z"></path><path fill="#546E7A" d="M32 20H34V24H32z"></path><path fill="#2196F3" d="M33,35H8c-1.104,0-2-0.896-2-2V8c0-1.104,0.896-2,2-2h14L33,35z"></path><path fill="#3F51B5" d="M26 42L23 35 33 35z"></path><path fill="#FFF" d="M19.172,24h-4.36l-1.008,3H11l4.764-13h2.444L23,27h-2.805L19.172,24z M15.444,22h3.101l-1.559-4.714L15.444,22z"></path>
+</svg>
+        
+        ${translated}
+        </span>`
+          : ""
       }</span> 
       `;
     }
@@ -486,14 +505,14 @@ class Rosarium {
   play() {
     rosarium.paused = false;
     rosarium.elements.pauseBtn.innerHTML = `<svg width="20" height="20" style="color: white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 10 16" > <path fill-rule="evenodd" d="M0 .8C0 .358.32 0 .714 0h1.429c.394 0 .714.358.714.8v14.4c0 .442-.32.8-.714.8H.714a.678.678 0 0 1-.505-.234A.851.851 0 0 1 0 15.2V.8Zm7.143 0c0-.442.32-.8.714-.8h1.429c.19 0 .37.084.505.234.134.15.209.354.209.566v14.4c0 .442-.32.8-.714.8H7.857c-.394 0-.714-.358-.714-.8V.8Z" clip-rule="evenodd" /> </svg>`;
-    rosarium.continue_progress_bar();
+    rosarium.continueProgressBar();
   }
 }
 
 const rosarium = new Rosarium();
 rosarium.configure();
 
-async function progress_bar_round(seconds, max, start_from) {
+async function progressBarRound(seconds, max, start_from) {
   let percent;
   if (start_from) {
     percent = start_from;
@@ -514,7 +533,7 @@ async function progress_bar_round(seconds, max, start_from) {
     rosarium.pausedPercent = percent;
     return true;
   }
-  return await progress_bar_round(++seconds, max);
+  return await progressBarRound(++seconds, max);
 }
 
 rosarium.three.loadGLTFModel(
@@ -655,7 +674,7 @@ rosarium.three.labelRenderer.domElement.addEventListener(
       const object = intersects[0].object;
       if (object.name.includes("node")) {
         rosarium.selectNode(Number(object.name.split("_")[1]));
-        rosarium.reset_progress_bar();
+        rosarium.resetProgressBar();
       }
     }
 
@@ -692,14 +711,14 @@ document.getElementById("left-btn").addEventListener("click", () => {
   let i = rosarium.currentNodeIndex - 1;
   if (i < 0) i = nodesPos.length - 1;
   rosarium.selectNode(i);
-  rosarium.reset_progress_bar();
+  rosarium.resetProgressBar();
 });
 
 document.getElementById("right-btn").addEventListener("click", () => {
   let i = rosarium.currentNodeIndex + 1;
   if (i > nodesPos.length - 1) i = 5;
   rosarium.selectNode(i);
-  rosarium.reset_progress_bar();
+  rosarium.resetProgressBar();
 });
 
 document.getElementById("day").innerText = rosarium.currDay;
