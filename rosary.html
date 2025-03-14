@@ -56,12 +56,12 @@
       }
 
       .bottom #progress-bar {
-        height: 2px;
+        height: 4px;
         width: 0px;
         background-color: #3b8043;
-        display: none;
-        transition: width 1s;
+        /* position: absolute; */
         bottom: 0;
+        left: 0;
       }
 
       .label {
@@ -187,7 +187,7 @@
         opacity: 1;
       }
     </style>
-    <script type="module" crossorigin src="./assets/rosary-868c643a.js"></script>
+    <script type="module" crossorigin src="./assets/rosary-7e6eaf5c.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/map-c6fd9b82.js">
   </head>
 
@@ -212,7 +212,8 @@
         </button>
       </li>
       <li class="mt-5">
-        <button id="reload-btn">
+        <button id="reload-btn" class="relative flex items-center">
+          <span class="tooltip-text absolute right-[30px] top-1/2 transform -translate-y-1/2 bg-[#555555] text-white text-sm px-2 py-1 rounded-md">Rosary ends</span>
           <svg
             class="w-[20px] h-[20px]"
             viewBox="0 0 22 22"
@@ -228,6 +229,7 @@
             ></path>
           </svg>
         </button>
+        
       </li>
       <li class="mt-5">
         <button id="right-btn">
