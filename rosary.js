@@ -21,6 +21,8 @@ THREE.DefaultLoadingManager.onLoad = function () {
   rosarium.startProgressBar();
 };
 
+document.getElementById("reload-btn").style.display = "none";
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 
@@ -28,7 +30,7 @@ for (const [label, value] of urlParams) {
   const el = document.getElementById(label);
   if (!el) continue;
   switch (label) {
-    case "auto-bead":
+    case "chaplet":
       el.checked = true;
       break;
     default:
@@ -40,11 +42,12 @@ for (const [label, value] of urlParams) {
 
 class Config {
   constructor() {
-    if (urlParams.get("auto-bead")) {
+    if (urlParams.get("bead-time") !== "") {
       this.beadTime = Number(urlParams.get("bead-time").replace(/[^0-9]/g, ""));
     } else {
       document.getElementById("pause-btn").style.display = "none";
     }
+    this.chaplet = urlParams.get("chaplet") === "on" ? true : false;
     this.jaculatorium = urlParams.get("jaculatorium");
     this.uiLanguage = urlParams.get("ui-language");
     this.fontSize = urlParams.get("font-size");
@@ -197,13 +200,13 @@ class Rosarium {
   fatherNodeIndex = 0;
 
   days = [
-    "IV. Mysteria gloriosa (In feria quarta et Dominica)",
-    "I. Mysteria Gaudiosa (In feria secunda et sabbato)",
-    "III. Mysteria dolorosa (In feria tertia et feria sexta)",
-    "IV. Mysteria gloriosa (In feria quarta et Dominica)",
-    "II. Mysteria Luminosa (In feria quinta)",
-    "III. Mysteria dolorosa (In feria tertia et feria sexta)",
-    "I. Mysteria Gaudiosa (In feria secunda et sabbato)",
+    "III. Mysteria gloriosa (Dominica)",
+    "I. Mysteria Gaudiosa (Feria Secunda)",
+    "II. Mysteria dolorosa (Feria Tertia)",
+    "III. Mysteria gloriosa (Feria Quarta)",
+    "I. Mysteria Gaudiosa (Feria Quinta)",
+    "II. Mysteria dolorosa (Feria Sexta)",
+    "III. Mysteria gloriosa (Sabbato)",
   ];
   currDay;
 
@@ -216,20 +219,13 @@ class Rosarium {
       "Quem in templo invenisti. [Lc 2:41-50]",
     ],
     II: [
-      "Qui apud Iordanem baptizatus est. [Mt 3:13, Mc 1:9, Jn 1:29]",
-      "Qui ipsum revelavit apud Canense matrimonium. [In 2:1-11]",
-      "Qui Regnum Dei annuntiavit. [Mc 1:15, Lc 10:8-11]",
-      "Qui transfiguratus est. [Mt 17:1-8, Mc 9:2-9]",
-      "Qui Eucharistiam instituit.[In 6:27-59, Mt 26:26-29, Mc 14:22-24, Lc 22:15-20]",
-    ],
-    III: [
       "Qui pro nobis sanguinem sudavit. [Lc 22:39-46]",
       "Qui pro nobis flagellatus est. [Mt 27:26, Mc 15:6-15, In 19:1]",
       "Qui pro nobis spinis coronatus est. [In 19:1-8]",
       "Qui pro nobis crucem baiulavit. [In 19:16-22]",
       "Qui pro nobis crucifixus est. [In 19:25-30]",
     ],
-    IV: [
+    III: [
       "Qui resurrexit a mortuis. [Mc 16:1-7]",
       "Qui in cælum ascendit. [Lc 24:46-53]",
       "Qui Spiritum Sanctum misit. [Acta 2:1-7]",
@@ -270,8 +266,15 @@ class Rosarium {
       placeTitle: document.getElementById("place-title"),
       rosaryTitle: document.getElementById("rosary-title"),
     };
+
     this.currDay = this.days[new Date().getDay()];
+    if (!this.config.chaplet) {
+      this.currMysteriumIndex = 1;
+      this.currDay = this.days[this.currMysteriumIndex];
+    }
+
     this.currMysterium = this.mysteria[this.currDay.split(".")[0]];
+
     try {
       this.place = Places.find((place) => place.id === this.config.place);
       this.rosary = Rosaries.find((rosary) => rosary.id === this.config.rosary);
@@ -420,15 +423,43 @@ class Rosarium {
     object.add(cubeLabel);
     this.three.labelRenderer.render(this.three.scene, this.three.camera);
   }
-
+  updateCurrMysterium() {
+    this.currMysteriumIndex++;
+    this.currDay = this.days[this.currMysteriumIndex];
+    this.currMysterium = this.mysteria[this.currDay.split(".")[0]];
+  }
+  endRosarium() {
+    document.getElementById("right-btn").style.display = "none";
+    document.getElementById("left-btn").style.display = "none";
+    document.getElementById("pause-btn").style.display = "none";
+    document.getElementById("reload-btn").style.display = "";
+    rosarium.paused = true;
+  }
   isPaterNoster() {
     return this.fatherNodeLabel >= 3;
   }
   isSalveRegina() {
+    if (this.config.chaplet) {
+      return (
+        this.fatherNodeLabel === 2 &&
+        this.lastNodeIndex === 60 &&
+        this.currentNodeIndex === 5
+      );
+    } else {
+      return (
+        this.fatherNodeLabel === 2 &&
+        this.lastNodeIndex === 60 &&
+        this.currentNodeIndex === 5 &&
+        this.currMysteriumIndex === 3
+      );
+    }
+  }
+  isNextMysterium() {
     return (
-      this.fatherNodeLabel === 2 &&
+      this.config.chaplet === false &&
       this.lastNodeIndex === 60 &&
-      this.currentNodeIndex === 5
+      this.currentNodeIndex === 5 &&
+      this.currMysteriumIndex < 3
     );
   }
   isMysterium() {
@@ -453,6 +484,10 @@ class Rosarium {
     this.fatherNodeIndex = 0;
     this.exitNodeLabel();
   }
+  nextMysterium() {
+    this.updateCurrMysterium();
+    this.endNodeLabel();
+  }
   getLabel(i) {
     switch (i) {
       case 0:
@@ -462,12 +497,17 @@ class Rosarium {
       case 27:
       case 16:
       case 5:
+        if (this.isNextMysterium()) {
+          this.nextMysterium();
+          return "Mysterium";
+        }
         if (this.isOratioFatima()) {
           this.incNodeLabel();
           return "Oratio Fatima";
         }
         if (this.isSalveRegina()) {
           this.endNodeLabel();
+          this.endRosarium();
           return "Salve, Regina";
         }
         if (this.isMysterium()) {
@@ -697,6 +737,10 @@ document.getElementById("config").addEventListener("click", () => {
 document.getElementById("cancel").addEventListener("click", () => {
   leftbar.style.display = "none";
   config_clicked = false;
+});
+
+document.getElementById("reload-btn").addEventListener("click", (e) => {
+  location.reload();
 });
 
 document.getElementById("pause-btn").addEventListener("click", (e) => {

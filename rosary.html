@@ -210,6 +210,24 @@
         </button>
       </li>
       <li class="mt-5">
+        <button id="reload-btn">
+          <svg
+            class="w-[20px] h-[20px]"
+            viewBox="0 0 22 22"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 2L11 3.99545L11.0592 4.05474M11 18.0001L13 19.9108L12.9703 19.9417M11.0592 4.05474L13 6M11.0592 4.05474C11.3677 4.01859 11.6817 4 12 4C16.4183 4 20 7.58172 20 12C20 14.5264 18.8289 16.7793 17 18.2454M7 5.75463C5.17107 7.22075 4 9.47362 4 12C4 16.4183 7.58172 20 12 20C12.3284 20 12.6523 19.9802 12.9703 19.9417M11 22.0001L12.9703 19.9417"
+              stroke="#fff"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
+        </button>
+      </li>
+      <li class="mt-5">
         <button id="right-btn">
           <svg
             class="w-[20px] h-[20px]"
@@ -316,23 +334,24 @@
             <div class="mt-2 flex">
               <div class="inline w-2/4">
                 <label class="block text-sm font-medium leading-6 text-black"
-                  >Bead timeout</label
+                  >Chaplet</label
                 >
                 <label class="switch">
-                  <input id="auto-bead" name="auto-bead" type="checkbox" />
+                  <input id="chaplet" name="chaplet" type="checkbox" />
                   <span class="slider round"></span>
                 </label>
               </div>
 
               <div class="inline w-2/4">
                 <label class="block text-sm font-medium leading-6 text-black"
-                  >Time</label
+                  >Bead Time</label
                 >
                 <select
                   id="bead-time"
                   name="bead-time"
                   class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
+                  <option value="">None</option>
                   <option value="30s">30s.</option>
                   <option value="40s">40s.</option>
                   <option value="50s">50s.</option>
