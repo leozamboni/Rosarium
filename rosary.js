@@ -433,6 +433,7 @@ class Rosarium {
     document.getElementById("left-btn").style.display = "none";
     document.getElementById("pause-btn").style.display = "none";
     document.getElementById("reload-btn").style.display = "";
+    this.startProgressBar()
     rosarium.paused = true;
   }
   isPaterNoster() {
@@ -556,12 +557,12 @@ async function progressBarRound(seconds, max, start_from) {
   let percent;
   if (start_from) {
     percent = start_from;
-    seconds = max / (100 / start_from);
+    seconds = max / (1 / start_from);
   } else {
-    percent = (100 / max) * seconds;
+    percent = (1 / max) * seconds;
   }
   rosarium.elements.progressBar.style.width = percent + "%";
-  await new Promise((r) => setTimeout(r, 1000));
+  await new Promise((r) => setTimeout(r, 10));
   if (percent === 100) {
     return false;
   }
