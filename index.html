@@ -82,7 +82,7 @@
         border-radius: 50%;
       }
     </style>
-    <script type="module" crossorigin src="./assets/main-5eacdfff.js"></script>
+    <script type="module" crossorigin src="./assets/main-4c609fb2.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/map-c6fd9b82.js">
   </head>
   <body>
@@ -188,23 +188,59 @@
           </div>
         </div>
 
-        <p class="text-xl leading-6 text-center text-yellow">
-          Crux Sacra sit mihi lux
-        </p>
-
         <div
           class="w-[80%] ml-[50%] -translate-x-1/2 h-[calc(100vh-4vw-130px)]"
         >
           <form action="rosary.html" class="h-full">
             <div
-              class="pr-[2px] h-[95%] scrollbar-w-0.5 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300 overflow-y-scroll"
+              class="pr-[2px] h-[85%] scrollbar-w-0.5 scrollbar scrollbar-thumb-yellow scrollbar-track-slate-300 overflow-y-scroll"
             >
               <div class="pb-10 mt-[3px] border-b border-gray-900/10">
                 <h2 class="text-base font-semibold leading-7 text-black">
-                  Mysterium diei
+                  Mysterium Diei
                 </h2>
                 <p id="day" class="text-sm leading-6 text-gray-600"></p>
-                <ul id="mysterium" class="px-4 list-inside list-decimal"></ul>
+                <ul id="mysterium" class="px-4 list-inside list-[upper-roman]"></ul>
+              </div>
+
+
+              <div class="pb-10 mt-[3px] border-b border-gray-900/10">
+                <h2 class="text-base font-semibold leading-7 text-black">
+                  General
+                </h2>
+  
+                <div class="mt-[2px]">
+                  <label class="block text-sm font-medium leading-6 text-black"
+                    >UI Language</label
+                  >
+                  <select
+                    disabled
+                    name="ui-language"
+                    id="ui-language"
+                    class="focus:ring-green-600 block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset"
+                  >
+                    <option value="english">English & Latin</option>
+                    <option value="portuguese">Portuguese & Latim</option>
+                  </select>
+                </div>
+
+                <div class="mt-[2px]">
+                  <label class="block text-sm font-medium leading-6 text-black"
+                    >Caption Font Size</label
+                  >
+                  <select
+                    name="font-size"
+                    id="font-size"
+                    class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600"
+                  >
+                    <option value="10pt">10pt</option>
+                    <option value="12pt">12pt</option>
+                    <option value="14pt">14pt</option>
+                    <option value="16pt" selected="selected">16pt</option>
+                    <option value="18pt">18pt</option>
+                    <option value="24pt">24pt</option>
+                  </select>
+                </div>
               </div>
 
               <div class="pb-10 mt-[3px] border-b border-gray-900/10">
@@ -232,7 +268,7 @@
                 ></div>
 
                 <label class="block text-sm font-medium leading-6 text-black"
-                  >Place texture quality</label
+                  >Place Texture Quality</label
                 >
                 <select
                   name="place-texture-quality"
@@ -257,7 +293,7 @@
                 </select>
 
                 <label class="block text-sm font-medium leading-6 text-black"
-                  >Rosary texture quality</label
+                  >Rosary Texture Quality</label
                 >
                 <select
                   name="rosary-texture-quality"
@@ -269,7 +305,7 @@
                 </select>
               </div>
 
-              <div class="pb-10 mt-[3px] border-b border-gray-900/10">
+              <div class="pb-10 mt-[3px]">
                 <h2 class="text-base font-semibold leading-7 text-black">
                   Rosary
                 </h2>
@@ -278,10 +314,10 @@
                   <div class="inline w-1/4">
                     <label
                       class="block text-sm font-medium leading-6 text-black"
-                      >Bead timeout</label
+                      >Chaplet</label
                     >
                     <label class="switch">
-                      <input id="auto-bead" name="auto-bead" type="checkbox" />
+                      <input id="chaplet" name="chaplet" type="checkbox" checked />
                       <span class="slider round"></span>
                     </label>
                   </div>
@@ -289,13 +325,14 @@
                   <div class="inline w-2/4">
                     <label
                       class="block text-sm font-medium leading-6 text-black"
-                      >Time</label
+                      >Bead Time</label
                     >
                     <select
                       id="bead-time"
                       name="bead-time"
                       class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:max-w-xs sm:text-sm sm:leading-6"
                     >
+                      <option value="">None</option>
                       <option value="30s">30s.</option>
                       <option value="40s">40s.</option>
                       <option value="50s">50s.</option>
@@ -333,49 +370,18 @@
                 </div>
               </div>
 
-              <h2 class="text-base mt-[3px] font-semibold leading-7 text-black">
-                General
-              </h2>
-
-              <div class="mt-[2px]">
-                <label class="block text-sm font-medium leading-6 text-black"
-                  >UI Language</label
-                >
-                <select
-                  disabled
-                  name="ui-language"
-                  id="ui-language"
-                  class="focus:ring-green-600 block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset"
-                >
-                  <option value="english">English</option>
-                  <option value="portuguese">Portuguese</option>
-                </select>
-              </div>
-
-              <div class="mt-[2px]">
-                <label class="block text-sm font-medium leading-6 text-black"
-                  >Font size</label
-                >
-                <select
-                  name="font-size"
-                  id="font-size"
-                  class="block w-2/4 rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-green-600"
-                >
-                  <option value="10pt">10pt</option>
-                  <option value="12pt">12pt</option>
-                  <option value="14pt">14pt</option>
-                  <option value="16pt" selected="selected">16pt</option>
-                  <option value="18pt">18pt</option>
-                  <option value="24pt">24pt</option>
-                </select>
-              </div>
+        
             </div>
 
             <div class="text-center mt-[30px]">
+              <p class="text-xl leading-5 text-center text-yellow">
+                "If you say the Rosary faithfully until death, I assure you that in spite of the gravity of your sins, you shall receive a never-fading crown of glory."
+                <p class="text-lg text-yellow">- St. Louis-Marie Grignion de Montfort, The Secret of the Rosary.</p>
+               </p>
               <button
                 id="start-btn"
                 type="submit"
-                class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 mt-[30px]"
               >
                 Enter
               </button>
