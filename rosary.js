@@ -580,10 +580,7 @@ async function progressBarRound(seconds, max, start_from) {
 rosarium.three.loadGLTFModel(
   rosarium.place,
   rosarium.config.placeTextureQuality,
-  (model) => {
-    model.position.set(-20, -25, 0);
-    model.scale.set(10, 10, 10);
-  }
+  rosarium.place.callback,
 );
 
 rosarium.three.loadGLTFModel(

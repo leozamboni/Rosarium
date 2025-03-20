@@ -65,8 +65,8 @@ document.getElementById("place-list").addEventListener("click", (e) => {
   place_texture_quality.innerHTML = "";
   const place = Places.find((place) => place.id === e.target.id);
   const opts = place.models.map(
-    (model) =>
-      `<option  value="${model}">${capitalizeFirstLetter(
+    (model, i) =>
+      `<option ${i === 0 ? 'selected' : ''}  value="${model}">${capitalizeFirstLetter(
         model.replace(".glb", "")
       )}</option>`
   );
